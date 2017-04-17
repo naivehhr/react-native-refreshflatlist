@@ -1,0 +1,24 @@
+{
+  "name": "react-native-refreshflatlist",
+  "version": "1.0.3",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naivehhr/react-native-refreshflatlist.git"
+  },
+  "author": "aran.hu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/naivehhr/react-native-refreshflatlist/issues"
+  },
+  "homepage": "https://github.com/naivehhr/react-native-refreshflatlist#readme",
+  "keywords": [
+    "react-native",
+    "FlatList",
+    "RefreshView"
+  ]
+}
