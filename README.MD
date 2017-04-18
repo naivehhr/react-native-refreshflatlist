@@ -2,6 +2,8 @@
 
 > 一个简单的支持双平台自定义头部刷新组件目前只支持 FlatList (RN >= 0.43)
 
+# *Components are not available ！！！！*
+
 ### Preview
 
 * ListView
