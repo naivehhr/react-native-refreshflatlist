@@ -9,14 +9,14 @@
 
 * ListView
 
-<img src="img/ios-listview.gif" width = "48%" />
-<img src="img/android-listview.gif" width = "49%" />
+<img src="img/ios-listview.gif" width = "35%" />
+<img src="img/android-listview.gif" width = "35%" />
 
 
 * ScrollView
 
-<img src="img/ios-scrollview.gif" width = "48%" />
-<img src="img/android-scrollview.gif" width = "49%" />
+<img src="img/ios-scrollview.gif" width = "35%" />
+<img src="img/android-scrollview.gif" width = "35%" />
 
 
 
