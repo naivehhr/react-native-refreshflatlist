@@ -1,10 +1,7 @@
 ## RefreshFlatList & RefreshVirtualizedList
-[![npm](https://img.shields.io/npm/v/react-native-refreshflatlist.svg)]
-(https://www.npmjs.com/package/react-native-refreshflatlist)
-[![npm](https://img.shields.io/npm/dm/react-native-refreshflatlist.svg)]
-(https://www.npmjs.com/package/react-native-refreshflatlist)
-[![npm](https://img.shields.io/npm/dt/react-native-refreshflatlist.svg)]
-(https://www.npmjs.com/package/react-native-refreshflatlist)
+[![npm](https://img.shields.io/npm/v/react-native-refreshflatlist.svg)](https://www.npmjs.com/package/react-native-refreshflatlist)
+[![npm](https://img.shields.io/npm/dm/react-native-refreshflatlist.svg)](https://www.npmjs.com/package/react-native-refreshflatlist)
+[![npm](https://img.shields.io/npm/dt/react-native-refreshflatlist.svg)](https://www.npmjs.com/package/react-native-refreshflatlist)
 
 > 一个简单的支持双平台自定义头部刷新组件目前只支持 FlatList (RN >= 0.43)
 
