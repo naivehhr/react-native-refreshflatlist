@@ -1,20 +1,27 @@
 ## RefreshFlatList & RefreshVirtualizedList
+[![npm](https://img.shields.io/npm/v/react-native-refreshflatlist.svg)]
+(https://www.npmjs.com/package/react-native-refreshflatlist)
+[![npm](https://img.shields.io/npm/dm/react-native-refreshflatlist.svg)]
+(https://www.npmjs.com/package/react-native-refreshflatlist)
+[![npm](https://img.shields.io/npm/dt/react-native-refreshflatlist.svg)]
+(https://www.npmjs.com/package/react-native-refreshflatlist)
 
 > 一个简单的支持双平台自定义头部刷新组件目前只支持 FlatList (RN >= 0.43)
-
-# *Components are not available ！！！！*
 
 ### Preview
 
 * ListView
 
-![IOS](img/ios.gif )
+<img src="img/ios-listview.gif" width = "48%" />
+<img src="img/android-listview.gif" width = "49%" />
 
-![ANDROID](img/android.gif)
 
 * ScrollView
 
-![Alt text](img/ios-1.gif)
+<img src="img/ios-scrollview.gif" width = "48%" />
+<img src="img/android-scrollview.gif" width = "49%" />
+
+
 
 > 注: 使用ViewType为ScrollView时，renderItem 请直接传入被包含的组件即可
 
@@ -40,9 +47,6 @@ _renderItem = ({item}) => {
 
 ### Demo
 
-See the Demo.ios.js & Demo.android.js
-
-RO
 
 ```
 git clone https://github.com/naivehhr/react-native-refreshflatlist.git
@@ -61,20 +65,16 @@ export default class FlatListTest extends Component {
       headerHeight: 100,
       refreshing: false,
       _data: [],
-      footerMsg: '加载中'
+      footerMsg: ''
     }
   }
   componentDidMount() {
-    // let a = Util.makeDataImmttable()
-    // let c = a.toJS()
-    this.setState({_data: Util.makeData()})
+    this.setState({_data: [1,2,3,4]})
   }
 
   _onRefreshFun = () => {
-    console.log('用户要求更新啦')
     this.setState({refreshing: true})
     setTimeout(() => {
-      console.log('用户更新完成')
       this.setState({refreshing: false})
     },2000)
   }
@@ -83,15 +83,15 @@ export default class FlatListTest extends Component {
     // ListView Item
     return (
       <View style={{width: width, height: 100}} >
-        <Text>{'我是自定义的' + item.title} </Text>
+        <Text>{'list item' + item.title} </Text>
       </View>
     )
   }
   
   
 	/**
-    * refreshState: 组件状态
-    * percent: 滑动百分比
+    * refreshState: 0: pullToRefresh; 1: releaseToRefresh; 2: refreshing; 3: refreshdown
+    * percent:
     */
   _customerHeader = (refreshState, percent) => {
     const { headerHeight, msg } = this.state
@@ -99,25 +99,25 @@ export default class FlatListTest extends Component {
       case RefreshState.pullToRefresh:
         return (
           <Animated.View style={{justifyContent: 'center', alignItems: 'center', width: width, height: headerHeight, backgroundColor: 'red'}} >
-            <Text>{ '下拉刷新' + percent }</Text>
+            <Text>{ 'pull to refresh' + percent }</Text>
           </Animated.View>
         )
       case RefreshState.releaseToRefresh:
         return (talk
           <Animated.View style={{justifyContent: 'center', alignItems: 'center', width: width, height: headerHeight, backgroundColor: 'red'}} >
-            <Text>{ '放手啊啊啊啊' + percent }</Text>
+            <Text>{ 'release to refresh' + percent }</Text>
           </Animated.View>
         )
       case RefreshState.refreshing:
         return (
           <Animated.View style={{justifyContent: 'center', alignItems: 'center', width: width, height: headerHeight, backgroundColor: 'red'}} >
-            <Text>{ '刷新中....' + percent }</Text>
+            <Text>{ 'refreshing....' + percent }</Text>
           </Animated.View>
         )
       case RefreshState.refreshdown:
         return (
           <Animated.View style={{ flexDirection: 'row',height: headerHeight, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red',}}>
-            <Text>{ '完成' }</Text>
+            <Text>{ 'refresh complete' }</Text>
           </Animated.View>
         )
       default:
@@ -138,11 +138,6 @@ export default class FlatListTest extends Component {
   }
 
   _onEndReached = () => {
-    // this.setState({footerMsg: '加载中'})
-    // this.timer2 = setTimeout(() => {
-    //   let _d = this.state._data.concat(Util.makeData(this.state._data.length))
-    //   this.setState({footerMsg: '加载更多', _data: _d})
-    // }, 1000)
   }
 
   render() {
@@ -168,10 +163,12 @@ export default class FlatListTest extends Component {
 
 | Prop              	| Type    |  Optional  | Default | Description |
 | --------          	| -----   | ----       | -----   | ----        |
-| ...ListView.propTypes	| | | | | [doc](http://example.net/)
+| ...ListView.propTypes	| | | | | [doc](http://facebook.github.io/react-native/docs/flatlist.html)
 | customRefreshView		| func	| Yes | DefaultView | 自定义头部组件
-| refreshing         	| boolean | | | 组件是否刷新
+| onRefreshFun		    | func	| Yes | DefaultTestFun | 触发刷新调用的方法
+| isRefreshing         	| boolean | | false | 
 | viewType        		| object | Yes | ScrollView | ScrollView, ListView|
+
 
 
 

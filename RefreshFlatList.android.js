@@ -2,7 +2,7 @@
  * @Author: aran.hu 
  * @Date: 2017-04-14 14:29:04 
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-04-17 10:44:31
+ * @Last Modified time: 2017-04-20 15:44:24
  */
 
 import React, { Component, PropTypes } from 'react';
@@ -26,7 +26,7 @@ import AndroidSwipeRefreshLayout from './AndroidSwipeRefreshLayout'
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedVirtualizedList = Animated.createAnimatedComponent(VirtualizedList);
 
-// 0: 未刷新; 1: 到达刷新点; 2: 刷新中;
+// 0: 未刷新; 1: 到达刷新点; 2: 刷新中; 3: 刷新完成
 export const RefreshState = {
   pullToRefresh: 0,
   releaseToRefresh: 1,
@@ -35,15 +35,15 @@ export const RefreshState = {
 }
 
 export const RefreshText = {
-  pullToRefresh: '下拉刷新',
-  releaseToRefresh: '松开刷新',
-  refreshing: '刷新ING....',
-  refreshdown: '刷新完成!'
+  pullToRefresh: 'pull to refresh',
+  releaseToRefresh: 'release to refresh ',
+  refreshing: 'refreshing...',
+  refreshdown: 'refresh complete!'
 }
 
 export const FooterText = {
-  pushToRefresh: '上拉加载',
-  loading: '加载ING....'
+  pushToRefresh: 'pull to refresh',
+  loading: 'refreshing...'
 }
 
 export const ViewType = {
@@ -77,9 +77,9 @@ export default class FlatListTest extends Component {
     }
     this._marginTop = new Animated.Value()
     this._scrollEndY = 0
-    this.key = false // 是否到达旋转点 用来避免多次触发动画
-    this.headerHeight = 60
-    this.isAnimating = false //是否再执行动画 控制不滑动过程中不多次触发同一个动画
+    this.headerHeight = 60 // Default refreshView height
+    this.isAnimating = false // Controls the same animation not many times during the sliding process
+    this.beforeRefreshState = RefreshState.pullToRefresh
   }
 
   componentWillMount() {
@@ -102,10 +102,14 @@ export default class FlatListTest extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextState) {
-    this.setRefreshState(nextProps.refreshing)
+    this.setRefreshState(nextProps.isRefresh)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
+    if(this.state.refreshState != RefreshState.refreshing 
+    && nextState.refreshState == RefreshState.refreshing) {
+      this.initAnimated()
+    }
     return true
   }
  
@@ -116,22 +120,22 @@ export default class FlatListTest extends Component {
   }
 
   initAnimated() {
+    this.state.rotation.setValue(0)
     Animated.timing(this.state.rotation, {
       toValue: 1,
       duration: 1000,
       easing: Easing.linear,
     }).start((r) => {
-      this.state.rotation.setValue(0)
-      this.initAnimated()
+      if(this.state.refreshState == RefreshState.refreshing){
+        this.initAnimated()
+      }
     })
   }
 
-  // 测试方法
+  // test onRefreshFun
   _onRefreshFun = () => {
-    console.log('trigger refreshFun')
     this.setRefreshState(true)
     this.timer1 = setTimeout(() => {
-      console.log('refreshFun complete')
       this.setRefreshState(false)
     }, 2000)
   }
@@ -139,11 +143,11 @@ export default class FlatListTest extends Component {
   setRefreshState(refreshing){
     const { onRefreshFun } = this.props
     if (refreshing) {
-      this.key = true
+      this.beforeRefreshState = RefreshState.refreshing
       this.updateRefreshViewState(RefreshState.refreshing)
     } else {
-      if(this.key) {
-        this.key = false
+      if(this.beforeRefreshState == RefreshState.refreshing) {
+        this.beforeRefreshState = RefreshState.pullToRefresh
         this.updateRefreshViewState(RefreshState.refreshdown)
       } else {
         this.updateRefreshViewState(RefreshState.pullToRefresh)
@@ -180,7 +184,7 @@ export default class FlatListTest extends Component {
         break;  
       case RefreshState.refreshdown:
         this.setState({refreshState: RefreshState.refreshdown, refreshText: RefreshText.refreshdown}, () => {
-          // 这个延时为了显示完成刷新的等待时间
+          // This delay is shown in order to show the refresh time to complete the refresh
           this.t = setTimeout(() => {
             Animated.timing(
               this._marginTop,
@@ -199,15 +203,15 @@ export default class FlatListTest extends Component {
   }
 
   _onSwipe = (movement) => {
-    //NOTE: 如果处于刷新中或者刷新完成状态不再触发刷新
+    /**
+     * If you are in the refresh or refresh the completion of the state will not trigger the refresh
+     */
     if(this.state.refreshState >= RefreshState.refreshing) return
     this._scrollEndY = movement
     this._marginTop.setValue( movement - this.headerHeight )
-    if(!this.key && movement >= this.headerHeight) {
-      this.key = true
+    if(movement >= this.headerHeight) {
       this.updateRefreshViewState(RefreshState.releaseToRefresh)
-    } else if(this.key && movement < this.headerHeight) {
-      this.key = false
+    } else if(movement < this.headerHeight) {
       this.updateRefreshViewState(RefreshState.pullToRefresh)
     }
   }
@@ -230,9 +234,9 @@ export default class FlatListTest extends Component {
   }
 
   _onEndReached = () => {
-    this.setState({footerMsg: '加载中'})
+    this.setState({footerMsg: 'loading'})
     this.timer2 = setTimeout(() => {
-      this.setState({footerMsg: '加载更多'})
+      this.setState({footerMsg: 'load more'})
     }, 1000)
   }
 
@@ -258,7 +262,6 @@ export default class FlatListTest extends Component {
     if(customRefreshView) return customRefreshView(refreshState, percent)
     switch (refreshState) {
       case RefreshState.pullToRefresh:
-        // this.isAnimating 这里是为了控制动画不被重复触发
         if(!this.isAnimating) {
           this.isAnimating = true
           Animated.timing(this.state.rotationNomal, {
@@ -353,9 +356,9 @@ export default class FlatListTest extends Component {
   }
 
   _renderItemScrollView = () => {
-    const { renderContent } = this.props
-    if(renderContent) {
-      return renderContent()
+    const { renderItem } = this.props
+    if(renderItem) {
+      return renderItem()
     }
     return (
       <View style={{width: width, height: 100}} >

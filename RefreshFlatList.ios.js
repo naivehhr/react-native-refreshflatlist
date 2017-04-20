@@ -2,7 +2,7 @@
  * @Author: aran.hu
  * @Date: 2017-04-14 14:29:15
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-04-17 10:48:06
+ * @Last Modified time: 2017-04-20 17:18:38
  */
 
 
@@ -17,13 +17,13 @@ import {
   Dimensions,
   Animated,
   PanResponder,
-  Easing
+  Easing,
+  InteractionManager
 } from 'react-native';
 import Util from './util'
-import Immutable from 'immutable'
 const { height, width } = Dimensions.get('window');
 
-// 0: 未刷新; 1: 到达刷新点; 2: 刷新中;
+// 0: 未刷新; 1: 到达刷新点; 2: 刷新中; 3: 刷新完成
 export const RefreshState = {
   pullToRefresh: 0,
   releaseToRefresh: 1,
@@ -32,21 +32,22 @@ export const RefreshState = {
 }
 
 export const RefreshText = {
-  pullToRefresh: '下拉刷新',
-  releaseToRefresh: '松开刷新',
-  refreshing: '刷新ING....',
-  refreshdown: '刷新完成!'
+  pullToRefresh: 'pull to refresh',
+  releaseToRefresh: 'release to refresh ',
+  refreshing: 'refreshing...',
+  refreshdown: 'refresh complete!'
 }
 
 export const FooterText = {
-  pushToRefresh: '上拉加载',
-  loading: '加载ING....'
+  pushToRefresh: 'pull to refresh',
+  loading: 'refreshing...'
 }
 
 export const ViewType = {
   ListView: 'ListView',
   ScrollView: 'ScrollView'
 }
+
 export default class RefreshFlatList extends Component {
 
   static defaultProps = {
@@ -69,15 +70,14 @@ export default class RefreshFlatList extends Component {
       refreshState: RefreshState.pullToRefresh,
       refreshText: RefreshText.pullToRefresh,
       percent: 0,
-      footerMsg: '加载更多'
+      footerMsg: 'load more',
     }
     this._scrollEndY = 0
-    this.key = false // 是否到达旋转点
     this.headerHeight = 60
-    this.mTop = 0 //记录距离顶部高
-    this.isOnMove = false // 区别是否是手指触发滑动: 计算滑动百分比
-
-    this.isAnimating = false //是否再执行动画 控制不滑动过程中不多次触发同一个动画
+    this.mTop = 0 // Record distance from top to top
+    this.isOnMove = false // Distinguish whether the finger is triggered Slip; Calculate the sliding percentage
+    this.isAnimating = false //Controls the same animation not many times during the sliding process
+    this.beforeRefreshState = RefreshState.pullToRefresh
   }
 
   componentWillMount() {
@@ -91,8 +91,9 @@ export default class RefreshFlatList extends Component {
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (event, gestureState) => true,
       onStartShouldSetPanResponderCapture: (event, gestureState) => true,
-      onMoveShouldSetPanResponder: (event, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (event, gestureState) => true,
+      onMoveShouldSetPanResponder: (event, gestureState) => false,
+      onMoveShouldSetPanResponderCapture: (event, gestureState) => false,
+      onPanResponderTerminationRequest: (event, gestureState) => true,
       onPanResponderGrant: (event, gestureState) => {
           this.onStart(event, gestureState);
       },
@@ -106,12 +107,21 @@ export default class RefreshFlatList extends Component {
   }
 
   componentDidMount() {
-    // this.setState({_data: Util.makeData()})
-    this.initAnimated()
   }
 
   componentWillReceiveProps(nextProps, nextState) {
-    this.setRefreshState(nextProps.refreshing)
+    this.setRefreshState(nextProps.isRefresh)
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    /**
+     * This code is just an example of the rotation animation.
+     */
+    if(this.state.refreshState != RefreshState.refreshing 
+    && nextState.refreshState == RefreshState.refreshing) {
+      this.initAnimated()
+    }
+    return true
   }
 
   componentWillUnmount() {
@@ -122,33 +132,33 @@ export default class RefreshFlatList extends Component {
   }
 
   initAnimated() {
+    this.state.rotation.setValue(0)
     this._an = Animated.timing(this.state.rotation, {
       toValue: 1,
       duration: 1000,
       easing: Easing.linear,
     }).start((r) => {
-      this.state.rotation.setValue(0)
-      this.initAnimated()
+      if(this.state.refreshState == RefreshState.refreshing){
+        this.initAnimated()
+      }
     })
   }
 
-  // 测试方法
+  // Test onRefreshFun
   _onRefreshFun = () => {
-    console.log('触发刷新事件')
     this.setRefreshState(true)
     this.timer1 = setTimeout(() => {
-      console.log('刷新完成')
       this.setRefreshState(false)
     }, 2000)
   }
 
   setRefreshState(refreshing){
     if (refreshing) {
-      this.key = true
+      this.beforeRefreshState = RefreshState.refreshing
       this.updateRefreshViewState(RefreshState.refreshing)
     } else {
-      if(this.key) {
-        this.key = false
+      if(this.beforeRefreshState == RefreshState.refreshing) {
+        this.beforeRefreshState = RefreshState.pullToRefresh
         this.updateRefreshViewState(RefreshState.refreshdown)
       } else {
         this.updateRefreshViewState(RefreshState.pullToRefresh)
@@ -171,7 +181,7 @@ export default class RefreshFlatList extends Component {
         break;
       case RefreshState.refreshdown:
         this.setState({refreshState: RefreshState.refreshdown, refreshText: RefreshText.refreshdown, percent: 100}, () => {
-          // 这个延时为了显示完成刷新的等待时间
+          // This delay is shown in order to show the refresh time to complete the refresh
           this.t = setTimeout(() => {
             this._flatList.scrollToOffset({animated:true, offset: 0})
             this.tt = setTimeout(() => {
@@ -185,9 +195,9 @@ export default class RefreshFlatList extends Component {
   }
 
   _onEndReached = () => {
-    this.setState({footerMsg: '加载中'})
+    this.setState({footerMsg: 'loading'})
     this.timer2 = setTimeout(() => {
-      this.setState({footerMsg: '加载更多'})
+      this.setState({footerMsg: 'load more'})
     }, 1000)
   }
 
@@ -207,17 +217,24 @@ export default class RefreshFlatList extends Component {
 
   onMove(e, g) {
     this.mTop = g.dy
+
+    // if(!this.key && this._scrollEndY < -this.headerHeight) {
+    //   this.key = true
+    //   this.updateRefreshViewState(RefreshState.releaseToRefresh)
+    // } else if(this.key && this._scrollEndY > -this.headerHeight) {
+    //   this.key = false
+    //   this.updateRefreshViewState(RefreshState.pullToRefresh)
+    // }
+    
     if(g.dy >= 0){
-      //刷新状态下，上推列表依percent然显示100%
       let p = parseInt(( g.dy / (2 * this.headerHeight)) * 100)
-      this.setState({percent: (p > 100? 100: p)})
-    }
-    if(!this.key && this._scrollEndY < -this.headerHeight) {
-      this.key = true
-      this.updateRefreshViewState(RefreshState.releaseToRefresh)
-    } else if(this.key && this._scrollEndY > -this.headerHeight) {
-      this.key = false
-      this.updateRefreshViewState(RefreshState.pullToRefresh)
+      p = p > 100? 100: p
+      this.setState({percent: p})
+      if(p < 100) {
+        this.updateRefreshViewState(RefreshState.pullToRefresh)
+      } else {
+        this.updateRefreshViewState(RefreshState.releaseToRefresh)
+      }
     }
   }
 
@@ -248,7 +265,7 @@ export default class RefreshFlatList extends Component {
     }
     return (
       <View style={{width: width, height: 100}} >
-        <Text> {'这是个ScrollView'} </Text>
+        <Text> {'This is a ScrollView'} </Text>
       </View>
     )
   }
@@ -380,7 +397,7 @@ export default class RefreshFlatList extends Component {
           keyExtractor={(v,i)=>i}
           ListHeaderComponent={this.customRefreshView}
           ListFooterComponent={this._ListFooterComponent}
-          onEndReached={this._onEndReached} // 直接传入就行了
+          onEndReached={this._onEndReached} 
           onEndReachedThreshold={0.1}
           {...this.props}
           style={[{...this.props.style},{marginTop: -this.headerHeight}]}
@@ -389,24 +406,3 @@ export default class RefreshFlatList extends Component {
     }
   }
 }
-
-  /*return (
-    <FlatList
-      ref={ flatList => { this._flatList = flatList }}
-      {...this._panResponder.panHandlers}
-      onScroll={this._onScroll}
-      data={data || this.state._data}
-      renderItem={this._renderItem}
-      keyExtractor={(v,i)=>i}
-      ListHeaderComponent={this.customRefreshView}
-      ListFooterComponent={this._ListFooterComponent}
-      onEndReached={this._onEndReached} // 直接传入就行了
-      onEndReachedThreshold={0}
-      {...this.props}
-      style={{marginTop: -this.headerHeight}}
-    />
-  );*/
-
-const styles = StyleSheet.create({
-
-});
