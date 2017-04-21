@@ -29,7 +29,7 @@ export default class Demo extends Component {
       headerHeight: 100,
       refreshing: false,
       _data: [],
-      footerMsg: '加载中'
+      footerMsg: 'loading'
     }
   }
   componentDidMount() {
@@ -39,19 +39,19 @@ export default class Demo extends Component {
   }
 
   _onRefreshFun = () => {
-    console.log('用户要求更新啦')
+    console.log('refresh request')
     this.setState({refreshing: true})
     setTimeout(() => {
-      console.log('用户更新完成')
+      console.log('refresh down')
       this.setState({refreshing: false})
     },2000)
   }
 
   _onEndReached = () => {
-    this.setState({footerMsg: '加载中'})
+    this.setState({footerMsg: 'loading'})
     this.timer2 = setTimeout(() => {
       let _d = this.state._data.concat(Util.makeData(this.state._data.length))
-      this.setState({footerMsg: '加载更多', _data: _d})
+      this.setState({footerMsg: 'load more', _data: _d})
     }, 1000)
   }
 
@@ -61,18 +61,18 @@ export default class Demo extends Component {
 
   _renderItem = () => {
     // ListView
-    /*return (
-      <View style={{width: width, height: 100}} >
-        <Text>{'我是自定义的' + item.title} </Text>
-      </View>
-    )*/
-
-    // ScrollView
     return (
       <View style={{width: width, height: 100}} >
-        <Text>{'我是自定义的View' + item.text} </Text>
+        <Text>{'ListView + ' + item.title} </Text>
       </View>
     )
+
+    // ScrollView
+    /*return (
+      <View style={{width: width, height: 100}} >
+        <Text>{'ScrollView' + item.text} </Text>
+      </View>
+    )*/
   }
 
   _customerHeader = (refreshState, percent) => {
@@ -81,33 +81,28 @@ export default class Demo extends Component {
       case RefreshState.pullToRefresh:
         return (
           <Animated.View style={{justifyContent: 'center', alignItems: 'center', width: width, height: headerHeight, backgroundColor: 'red'}} >
-            <Text>{ '下拉刷新' + percent }</Text>
+            <Text>{ 'pull to refresh' + percent }</Text>
           </Animated.View>
         )
       case RefreshState.releaseToRefresh:
         return (
           <Animated.View style={{justifyContent: 'center', alignItems: 'center', width: width, height: headerHeight, backgroundColor: 'red'}} >
-            <Text>{ '放手啊啊啊啊' + percent }</Text>
+            <Text>{ 'release to refresh' + percent }</Text>
           </Animated.View>
         )
       case RefreshState.refreshing:
         return (
           <Animated.View style={{justifyContent: 'center', alignItems: 'center', width: width, height: headerHeight, backgroundColor: 'red'}} >
-            <Text>{ '刷新中....' + percent }</Text>
+            <Text>{ 'refreshing...' + percent }</Text>
           </Animated.View>
         )
       case RefreshState.refreshdown:
         return (
           <Animated.View style={{justifyContent: 'center', alignItems: 'center', width: width, height: headerHeight, backgroundColor: 'red'}} >
-            <Text>{ '刷新完成' }</Text>
+            <Text>{ 'refresh down' }</Text>
           </Animated.View>
         )
       default:
-        return (
-          <View style={{justifyContent: 'center', alignItems: 'center', height: headerHeight, width: width}}>
-            <Text>{ percent }</Text>
-          </View>
-        )
     }
   }
 
@@ -115,14 +110,6 @@ export default class Demo extends Component {
     return (
       <View style={{ flex:1, justifyContent: 'center', alignItems: 'center',width: width, height: 30, backgroundColor: 'red'}} >
          <Text style={{textAlign: 'center',}}> { this.state.footerMsg } </Text>
-      </View>
-    )
-  }
-
-  _renderContent = () => {
-    return (
-      <View style={{width: width, height: 100}} >
-        <Text> {'这是个自定义的ScrollView'} </Text>
       </View>
     )
   }
@@ -137,7 +124,6 @@ export default class Demo extends Component {
           customRefreshView={this._customerHeader}
           ListFooterComponent={this._listFooterComponent}
           renderItem={this._renderItem}
-          renderContent={this._renderContent}
           onRefreshFun={this._onRefreshFun}
           viewType={ViewType.ListView}
         />
@@ -152,15 +138,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  }
 });

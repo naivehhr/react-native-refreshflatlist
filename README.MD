@@ -5,22 +5,28 @@
 
 > A simple support ios and android platform custom header refresh components; currently only supports FlatList (RN >= 0.43)
 
+
+
+```
+npm i react-native-refreshflatlist --save
+```
+
 ### Preview
 
 * ListView
 
-<img src="img/ios-listview.gif" width = "35%" />
-<img src="img/android-listview.gif" width = "35%" />
+<img src="img/ios-listview.gif" width = "30%" />
+<img src="img/android-listview.gif" width = "30%" />
 
 
 * ScrollView
 
-<img src="img/ios-scrollview.gif" width = "35%" />
-<img src="img/android-scrollview.gif" width = "35%" />
+<img src="img/ios-scrollview.gif" width = "30%" />
+<img src="img/android-scrollview.gif" width = "30%" />
 
 
 
-> 注: 使用ViewType为ScrollView时，renderItem 请直接传入被包含的组件即可
+* ViewType
 
 ```
 // ScrollView
@@ -36,7 +42,7 @@ _renderItem = () => {
 _renderItem = ({item}) => {
     return (
       <View style={{width: width, height: 100}} >
-        <Text>{'我是自定义的ListVeiwItem' + item.title} </Text>
+        <Text>{'ListVeiwItem' + item.title} </Text>
       </View>
     )
   }
@@ -48,7 +54,6 @@ _renderItem = ({item}) => {
 ```
 git clone https://github.com/naivehhr/react-native-refreshflatlist.git
 cd react-native-refreshflatlist/example && npm install
-react-native react-native-refreshflatlist 
 
 ```
 
@@ -143,6 +148,7 @@ export default class FlatListTest extends Component {
         <RefreshFlatList
           data={this.state._data}
           refreshing={this.state.refreshing}
+          onRefreshFun={this._onRefreshFun}
           onEndReached={this._onEndReached}
           customRefreshView={this._customerHeader}
           ListFooterComponent={this._listFooterComponent}
