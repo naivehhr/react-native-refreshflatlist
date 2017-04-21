@@ -2,7 +2,7 @@
  * @Author: aran.hu 
  * @Date: 2017-04-14 14:29:04 
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-04-20 15:44:24
+ * @Last Modified time: 2017-04-21 16:50:45
  */
 
 import React, { Component, PropTypes } from 'react';
@@ -85,7 +85,7 @@ export default class FlatListTest extends Component {
   componentWillMount() {
     const { customRefreshView } = this.props
     if(customRefreshView) {
-      const { height } = customRefreshView().props.style
+      const { height } = customRefreshView(RefreshState.pullToRefresh).props.style
       this.headerHeight = height
     }
     this._marginTop.setValue(-this.headerHeight)

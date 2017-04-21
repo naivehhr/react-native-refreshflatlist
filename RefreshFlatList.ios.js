@@ -2,7 +2,7 @@
  * @Author: aran.hu
  * @Date: 2017-04-14 14:29:15
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-04-20 17:18:38
+ * @Last Modified time: 2017-04-21 16:48:55
  */
 
 
@@ -83,8 +83,7 @@ export default class RefreshFlatList extends Component {
   componentWillMount() {
     const { customRefreshView } = this.props
     if(customRefreshView) {
-      //更新自定义头部组件高度
-      const { height } = customRefreshView().props.style
+      const { height } = customRefreshView(RefreshState.pullToRefresh).props.style
       this.headerHeight = height
     }
 
