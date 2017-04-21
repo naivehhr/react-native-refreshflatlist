@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/dm/react-native-refreshflatlist.svg)](https://www.npmjs.com/package/react-native-refreshflatlist)
 [![npm](https://img.shields.io/npm/dt/react-native-refreshflatlist.svg)](https://www.npmjs.com/package/react-native-refreshflatlist)
 
-> 一个简单的支持双平台自定义头部刷新组件目前只支持 FlatList (RN >= 0.43)
+> A simple support ios and android platform custom header refresh components; currently only supports FlatList (RN >= 0.43)
 
 ### Preview
 
