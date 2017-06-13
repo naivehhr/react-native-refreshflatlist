@@ -9,7 +9,14 @@ import {
 import Util from './util'
 import RefreshFlatList, { RefreshState, ViewType } from 'react-native-refreshflatlist'
 const {height, width} = Dimensions.get('window');
-export default class example extends Component {
+import { 
+	StackNavigator, 
+	TabNavigator, 
+	DrawerNavigator,
+	DrawerItems,
+  NavigationActions
+ } from 'react-navigation'
+class example extends Component {
 
   constructor() {
     super()
@@ -45,6 +52,14 @@ export default class example extends Component {
   }
 }
 
+const ModalStack = TabNavigator({
+  APP: {
+    screen: example,
+  }
+}, {
+  tabBarPosition: 'bottom',
+});
+export default ModalStack
 const styles = StyleSheet.create({
   container: {
     flex: 1,

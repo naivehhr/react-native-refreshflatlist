@@ -9,6 +9,7 @@
 
 ```
 npm i react-native-refreshflatlist --save
+react-native link react-native-refreshflatlist
 ```
 
 ### Preview

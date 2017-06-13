@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "dependencies": {
+    "immutable": "^3.8.1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/naivehhr/react-native-refreshflatlist.git"
