@@ -2,7 +2,7 @@
  * @Author: aran.hu 
  * @Date: 2017-04-14 14:29:04 
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-04-21 16:50:45
+ * @Last Modified time: 2017-06-23 11:31:42
  */
 
 import React, { Component, PropTypes } from 'react';
@@ -378,7 +378,7 @@ export default class FlatListTest extends Component {
         onRefresh={this._onRefresh}>
         {
           viewType == ViewType.ScrollView?
-            <AnimatedVirtualizedList
+            <AnimatedFlatList
               ref={ flatList => { this._flatList = flatList }}
               data={['1']}
               renderItem={this._renderItemScrollView}

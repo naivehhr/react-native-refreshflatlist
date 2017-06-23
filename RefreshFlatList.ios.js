@@ -2,7 +2,7 @@
  * @Author: aran.hu
  * @Date: 2017-04-14 14:29:15
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-04-21 16:48:55
+ * @Last Modified time: 2017-06-23 11:31:33
  */
 
 
@@ -374,7 +374,7 @@ export default class RefreshFlatList extends Component {
     const { viewType, data } = this.props
     if(viewType == 'ScrollView') {
       return (
-        <VirtualizedList
+        <FlatList
           ref={ flatList => { this._flatList = flatList }}
           {...this._panResponder.panHandlers}
           onScroll={this._onScroll}

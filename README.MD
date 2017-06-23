@@ -14,16 +14,11 @@ react-native link react-native-refreshflatlist
 
 ### Preview
 
-* ListView
+* ScreenShot
 
-<img src="img/ios-listview.gif" width = "30%" />
-<img src="img/android-listview.gif" width = "30%" />
-
-
-* ScrollView
-
-<img src="img/ios-scrollview.gif" width = "30%" />
-<img src="img/android-scrollview.gif" width = "30%" />
+<img src="img/ios.gif" width = "30%" />
+<br>
+<img src="img/android.gif" width = "30%" />
 
 
 
@@ -34,7 +29,7 @@ react-native link react-native-refreshflatlist
 _renderItem = () => {
 	return (
 	  <View style={{width: width, height: 100}} >
-	    <Text>{'我是自定义的ScrollView'} </Text>
+	    <Text>{'Customer ScrollView'} </Text>
 	  </View>
 	)
 }
@@ -43,7 +38,7 @@ _renderItem = () => {
 _renderItem = ({item}) => {
     return (
       <View style={{width: width, height: 100}} >
-        <Text>{'ListVeiwItem' + item.title} </Text>
+        <Text>{'Customer ListVeiw' + item.title} </Text>
       </View>
     )
   }
@@ -177,3 +172,11 @@ export default class FlatListTest extends Component {
 
 
 > 注： 本组件Android手势模块基于 [react-native-smart-pull-to-refresh-listview](https://github.com/react-native-component/react-native-smart-pull-to-refresh-listview/)
+
+## 更新日志
+
+2017/06/23
+* 升级RN至0.45.1
+* 更改ScrollView为FlatList实现
+* 更新example
+

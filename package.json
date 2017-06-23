@@ -1,6 +1,6 @@
 {
   "name": "react-native-refreshflatlist",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,8 @@
   "keywords": [
     "react-native",
     "FlatList",
-    "RefreshView"
+    "RefreshView",
+    "ListView",
+    "ScrollView"
   ]
 }

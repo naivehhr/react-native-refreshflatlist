@@ -16,7 +16,7 @@ import {
 	DrawerItems,
   NavigationActions
  } from 'react-navigation'
-class example extends Component {
+class TestListView extends Component {
 
   constructor() {
     super()
@@ -24,7 +24,7 @@ class example extends Component {
       headerHeight: 100,
       refreshing: false,
       _data: [],
-      footerMsg: '加载中'
+      footerMsg: 'loading more'
     }
   }
 
@@ -35,7 +35,7 @@ class example extends Component {
   _renderItem = ({item}) => {
     return (
       <View style={{width: width, height: 100}} >
-        <Text>{'我是自定义的' + item.title} </Text>
+        <Text>{'The Customer ListView' + item.title} </Text>
       </View>
     )
   }
@@ -52,14 +52,43 @@ class example extends Component {
   }
 }
 
-const ModalStack = TabNavigator({
-  APP: {
-    screen: example,
+class TestScrollView extends Component {
+  componentDidMount() {
   }
+  _renderItem = () => {
+    return (
+      <View style={{
+        width: width, 
+        height: height, 
+        justifyContent: 'center',
+        alignItems: 'center'}} >
+        <Text>{'The Customer ScrollView'} </Text>
+      </View>
+    )
+  }
+
+  render() {
+    return(
+      <View style={styles.container}>
+        <RefreshFlatList
+          renderItem={this._renderItem}
+          viewType={'ScrollView'}
+        />
+      </View>
+    )
+  }
+}
+const TabStack = TabNavigator({
+  Test_ListView: {
+    screen: TestListView,
+  },
+  Test_ScrollView: {
+    screen: TestScrollView,
+  },
 }, {
-  tabBarPosition: 'bottom',
+  initialRouteName: 'Test_ListView',
 });
-export default ModalStack
+export default TabStack
 const styles = StyleSheet.create({
   container: {
     flex: 1,
