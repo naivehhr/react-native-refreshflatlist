@@ -177,6 +177,7 @@ export default class FlatListTest extends Component {
 
 2017/06/23
 * 升级RN至0.45.1
+* 集成React Navigation
 * 更改ScrollView为FlatList实现
 * 更新example
 
