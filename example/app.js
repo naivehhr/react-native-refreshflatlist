@@ -46,6 +46,7 @@ class TestListView extends Component {
           data={this.state._data}
           renderItem={this._renderItem}
           viewType={'ListView'}
+          style={{backgroundColor:'yellow'}}
         />
       </View>
     );
@@ -73,6 +74,7 @@ class TestScrollView extends Component {
         <RefreshFlatList
           renderItem={this._renderItem}
           viewType={'ScrollView'}
+          style={{backgroundColor:'red'}}
         />
       </View>
     )
