@@ -30,10 +30,9 @@ class TestListView extends Component {
 
   componentDidMount() {
     this.setState({_data: Util.makeData()})
-    // setTimeout(()=>{
-    // this.setState({_data: [{title: 'Everyone is dissatisfied with his own fortune.'}]})
-      
-    // }, 2000);
+    setTimeout(()=>{
+      this.setState({_data: [{title: 'Everyone is dissatisfied with his own fortune.'}]})
+    }, 1000);
   }
 
   _renderItem = ({item}) => {
