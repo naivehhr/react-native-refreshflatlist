@@ -30,6 +30,10 @@ class TestListView extends Component {
 
   componentDidMount() {
     this.setState({_data: Util.makeData()})
+    // setTimeout(()=>{
+    // this.setState({_data: [{title: 'Everyone is dissatisfied with his own fortune.'}]})
+      
+    // }, 2000);
   }
 
   _renderItem = ({item}) => {
@@ -54,7 +58,18 @@ class TestListView extends Component {
 }
 
 class TestScrollView extends Component {
+
+  constructor() {
+    super()
+    this.state = {
+      msg: 'I just want to say'
+    }
+  }
+
   componentDidMount() {
+    setTimeout(()=>{
+      this.setState({msg: 'People do not frivolous waste young'})
+    }, 2000);
   }
   _renderItem = () => {
     return (
@@ -63,7 +78,7 @@ class TestScrollView extends Component {
         height: height, 
         justifyContent: 'center',
         alignItems: 'center'}} >
-        <Text>{'The Customer ScrollView'} </Text>
+        <Text>{'The Customer ScrollView' + this.state.msg} </Text>
       </View>
     )
   }

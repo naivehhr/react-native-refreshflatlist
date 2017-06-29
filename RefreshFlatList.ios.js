@@ -2,7 +2,7 @@
  * @Author: aran.hu
  * @Date: 2017-04-14 14:29:15
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-06-23 11:31:33
+ * @Last Modified time: 2017-06-29 14:32:26
  */
 
 
@@ -21,6 +21,7 @@ import {
   InteractionManager
 } from 'react-native';
 import Util from './util'
+import Item from './Item'
 const { height, width } = Dimensions.get('window');
 
 // 0: 未刷新; 1: 到达刷新点; 2: 刷新中; 3: 刷新完成
@@ -249,15 +250,12 @@ export default class RefreshFlatList extends Component {
     return prev.item.text !== next.item.text;
   }
 
-  _renderItem = ({item}) => {
-    return (
-      <View style={{width: width, height: 100}} >
-        <Text> {item.text} </Text>
-      </View>
-    )
+   _renderItem = (item) => {
+    return <Item {...this.props} item={item} />
   }
 
   _renderItemScrollView = () => {
+     console.log('----asdfss--')
     const { renderItem } = this.props
     if(renderItem) {
       return renderItem()
@@ -377,6 +375,7 @@ export default class RefreshFlatList extends Component {
         <FlatList
           ref={ flatList => { this._flatList = flatList }}
           {...this._panResponder.panHandlers}
+          {...this.props}
           onScroll={this._onScroll}
           data={['1']}
           renderItem={this._renderItemScrollView}
@@ -390,6 +389,7 @@ export default class RefreshFlatList extends Component {
         <FlatList
           ref={ flatList => { this._flatList = flatList }}
           {...this._panResponder.panHandlers}
+          {...this.props}
           onScroll={this._onScroll}
           data={data || this.state._data}
           renderItem={this._renderItem}
@@ -398,7 +398,6 @@ export default class RefreshFlatList extends Component {
           ListFooterComponent={this._ListFooterComponent}
           onEndReached={this._onEndReached} 
           onEndReachedThreshold={0.1}
-          {...this.props}
           style={[{...this.props.style},{marginTop: -this.headerHeight}]}
         />
       );

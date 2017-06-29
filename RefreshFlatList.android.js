@@ -2,7 +2,7 @@
  * @Author: aran.hu 
  * @Date: 2017-04-14 14:29:04 
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-06-23 11:31:42
+ * @Last Modified time: 2017-06-29 14:32:50
  */
 
 import React, { Component, PropTypes } from 'react';
@@ -20,7 +20,9 @@ import {
   ScrollView,
   TouchableOpacity
 } from 'react-native';
+
 import Util from './util'
+import Item from './Item'
 const {height, width} = Dimensions.get('window');
 import AndroidSwipeRefreshLayout from './AndroidSwipeRefreshLayout'
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -90,7 +92,6 @@ export default class FlatListTest extends Component {
     }
     this._marginTop.setValue(-this.headerHeight)
     this._marginTop.addListener((v) => {
-      //TODO: 这里要优化每一帧渲染一次的要求
       let p = parseInt(( (this.headerHeight + v.value) / (this.headerHeight)) * 100)
       this.setState({percent: (p > 100? 100: p) + '%'})
     })
@@ -212,7 +213,8 @@ export default class FlatListTest extends Component {
     if(movement >= this.headerHeight) {
       this.updateRefreshViewState(RefreshState.releaseToRefresh)
     } else if(movement < this.headerHeight) {
-      this.updateRefreshViewState(RefreshState.pullToRefresh)
+      if(this.state.refreshState === RefreshState.releaseToRefresh)
+        this.updateRefreshViewState(RefreshState.pullToRefresh)
     }
   }
 
@@ -240,20 +242,8 @@ export default class FlatListTest extends Component {
     }, 1000)
   }
 
-  _renderItem = ({item}) => {
-    return (
-      <View style={{width: width, height: 100, backgroundColor: 'yellow'}} >
-        <Text> {item.text} </Text>
-      </View>
-    )
-  }
-
-  _ListHeaderComponent = () => {
-    return (
-      <View style={{width: width, height: this.headerHeight, backgroundColor: 'red'}} >
-         <Text> Header Area</Text>
-      </View>
-    )
+  _renderItem = (item) => {
+    return <Item {...this.props} item={item} />
   }
 
   customRefreshView = () => {
@@ -355,18 +345,6 @@ export default class FlatListTest extends Component {
     )
   }
 
-  _renderItemScrollView = () => {
-    const { renderItem } = this.props
-    if(renderItem) {
-      return renderItem()
-    }
-    return (
-      <View style={{width: width, height: 100}} >
-        <Text> {'This is a ScrollView'} </Text>
-      </View>
-    )
-  }
-
   render() {
     const { viewType, data } = this.props
     return (
@@ -380,8 +358,9 @@ export default class FlatListTest extends Component {
           viewType == ViewType.ScrollView?
             <AnimatedFlatList
               ref={ flatList => { this._flatList = flatList }}
+              {...this.props}
               data={['1']}
-              renderItem={this._renderItemScrollView}
+              renderItem={this._renderItem}
               keyExtractor={(v,i)=>i}
               ListHeaderComponent={this.customRefreshView}
               style={[{...this.props.style},{marginTop: this._marginTop}]}
@@ -389,14 +368,14 @@ export default class FlatListTest extends Component {
           :
             <AnimatedFlatList
               ref={ flatList => { this._flatList = flatList }}
+              {...this.props}
               data={data || this.state._data}
-              renderItem={this._renderItem}
               keyExtractor={(v,i)=>i}
+              renderItem={this._renderItem}
               ListHeaderComponent={this.customRefreshView}
               ListFooterComponent={this._ListFooterComponent}
               onEndReached={this._onEndReached} 
               onEndReachedThreshold={0}
-              {...this.props}
               style={[{...this.props.style},{marginTop: this._marginTop}]}
             />
         }
@@ -404,3 +383,4 @@ export default class FlatListTest extends Component {
     );
   }
 }
+
