@@ -2,7 +2,7 @@
  * @Author: aran.hu
  * @Date: 2017-04-14 14:29:15
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-06-29 14:32:26
+ * @Last Modified time: 2017-06-29 14:42:12
  */
 
 
@@ -255,7 +255,6 @@ export default class RefreshFlatList extends Component {
   }
 
   _renderItemScrollView = () => {
-     console.log('----asdfss--')
     const { renderItem } = this.props
     if(renderItem) {
       return renderItem()
