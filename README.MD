@@ -1,4 +1,5 @@
 ## RefreshFlatList & RefreshVirtualizedList
+
 [![npm](https://img.shields.io/npm/v/react-native-refreshflatlist.svg)](https://www.npmjs.com/package/react-native-refreshflatlist)
 [![npm](https://img.shields.io/npm/dm/react-native-refreshflatlist.svg)](https://www.npmjs.com/package/react-native-refreshflatlist)
 [![npm](https://img.shields.io/npm/dt/react-native-refreshflatlist.svg)](https://www.npmjs.com/package/react-native-refreshflatlist)
@@ -180,4 +181,7 @@ export default class FlatListTest extends Component {
 * 集成React Navigation
 * 更改ScrollView为FlatList实现
 * 更新example
+
+2017/06/29
+* 优化android平台性能
 
