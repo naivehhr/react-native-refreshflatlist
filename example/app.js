@@ -29,11 +29,11 @@ class TestListView extends Component {
   }
 
   componentDidMount() {
-    // setTimeout(()=>{
-    //     this.setState({
-    //       _data: [{title: '54555'}]
-    //     })
-    //   }, 5000);
+    setTimeout(()=>{
+        this.setState({
+          _data: [{title: '54555'}]
+        })
+      }, 5000);
   }
 
   onRefreshFun = () => {
@@ -101,7 +101,11 @@ class TestScrollView extends Component {
   }
 
   componentDidMount() {
-
+    setTimeout(()=>{
+        this.setState({
+         msg: 'People do not frivolous waste young 5000'
+        })
+      }, 5000);
   }
   
   _renderItem = () => {
