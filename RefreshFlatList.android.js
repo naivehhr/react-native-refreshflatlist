@@ -2,7 +2,7 @@
  * @Author: aran.hu 
  * @Date: 2017-04-14 14:29:04 
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-06-30 15:45:10
+ * @Last Modified time: 2017-06-30 17:58:24
  */
 
 import React, { Component, PropTypes } from 'react';
@@ -94,12 +94,6 @@ export default class FlatListTest extends Component {
     }
     this._marginTop.setValue(-this.headerHeight)
     this._marginTop.addListener((v) => {
-      if(v.value == -this.headerHeight) this.setState({toRenderItem: true}) 
-      // if(v.value == -this.headerHeight && !this.state.toRenderItem){
-      //   this.setState({toRenderItem: true}) 
-      // } else {
-      //   this.setState({toRenderItem: false}) 
-      // }
       let p = parseInt(( (this.headerHeight + v.value) / (this.headerHeight)) * 100)
       if(this.state.refreshState !== RefreshState.refreshdown)
         this.setState({percent: (p > 100? 100: p) + '%'})
@@ -160,7 +154,8 @@ export default class FlatListTest extends Component {
         this.beforeRefreshState = RefreshState.pullToRefresh
         this.updateRefreshViewState(RefreshState.refreshdown)
       } else {
-        this.updateRefreshViewState(RefreshState.pullToRefresh)
+        // 意欲何为?
+        // this.updateRefreshViewState(RefreshState.pullToRefresh)
       }
     }
   }
@@ -175,7 +170,9 @@ export default class FlatListTest extends Component {
               toValue: -this.headerHeight,
               duration: 200,
               easing: Easing.linear
-          }).start()
+          }).start(()=>{
+            this.updateItemRenderState()
+          })
         })
         break;
       case RefreshState.releaseToRefresh:
@@ -195,8 +192,9 @@ export default class FlatListTest extends Component {
       case RefreshState.refreshdown:
         this.setState({refreshState: RefreshState.refreshdown, refreshText: RefreshText.refreshdown, toRenderItem: true}, () => {
           // This delay is shown in order to show the refresh time to complete the refresh
-          // this.setState({toRenderItem: false}) 
+          this.setState({toRenderItem: false}) 
           this.t = setTimeout(() => {
+            // 当刷新完成时，先回到初始状态保持100%, 然后在更新组件状态
             Animated.timing(
               this._marginTop,
               {
@@ -208,8 +206,16 @@ export default class FlatListTest extends Component {
             })
           }, 500)
         })
+        break
       default:
         
+    }
+  }
+
+  // 滑动列表结束后，设置item可以render， 用来接收新的state
+  updateItemRenderState() {
+    if(!this.state.toRenderItem) {
+      this.setState({toRenderItem: true})
     }
   }
 
@@ -217,7 +223,7 @@ export default class FlatListTest extends Component {
     /**
      * If you are in the refresh or refresh the completion of the state will not trigger the refresh
      */
-    this.setState({toRenderItem: false})
+    // this.setState({toRenderItem: false})
     if(this.state.refreshState >= RefreshState.refreshing) return
     this._scrollEndY = movement
     this._marginTop.setValue( movement - this.headerHeight )
@@ -233,6 +239,7 @@ export default class FlatListTest extends Component {
     if(this.state.refreshState >= RefreshState.refreshing) return
     if(this._scrollEndY >= this.headerHeight) {
       const { onRefreshFun } = this.props
+      this.setRefreshState(true)
       onRefreshFun?onRefreshFun(): this._onRefreshFun()
     } else {
       //下拉距离不够自动收回
@@ -242,7 +249,9 @@ export default class FlatListTest extends Component {
           toValue: -this.headerHeight,
           duration: 200,
           easing: Easing.linear
-      }).start()
+      }).start(()=>{
+        this.updateItemRenderState()
+      })
     }
   }
 
@@ -257,6 +266,15 @@ export default class FlatListTest extends Component {
     }, 1000)
   }
 
+  _onTouchStart = () => {
+    this.setState({toRenderItem: false})
+  } 
+  _onMomentumScrollEnd = () => {
+    this.setState({toRenderItem: true})
+  }
+  _onScrollEndDrag = () => {
+    this.setState({toRenderItem: true})
+  }
   _renderItem = (item) => {
     return <Item {...this.props} item={item} toRenderItem={this.state.toRenderItem} />
   }
@@ -378,6 +396,8 @@ export default class FlatListTest extends Component {
               renderItem={this._renderItem}
               keyExtractor={(v,i)=>i}
               ListHeaderComponent={this.customRefreshView}
+              onTouchStart={this._onTouchStart}
+              onMomentumScrollEnd={this._onMomentumScrollEnd}
               style={[{...this.props.style},
               {marginTop: this._marginTop.interpolate({
                 inputRange: [-this.headerHeight, 0, 500],
@@ -395,6 +415,9 @@ export default class FlatListTest extends Component {
               ListFooterComponent={this._ListFooterComponent}
               onEndReached={this._onEndReached} 
               onEndReachedThreshold={10}
+              onTouchStart={this._onTouchStart}
+              onScrollEndDrag={this._onScrollEndDrag}
+              onMomentumScrollEnd={this._onMomentumScrollEnd}
               style={[{...this.props.style},
               {marginTop: this._marginTop.interpolate({
                 inputRange: [-this.headerHeight, 0, 500],
@@ -406,4 +429,3 @@ export default class FlatListTest extends Component {
     );
   }
 }
-

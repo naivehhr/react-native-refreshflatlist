@@ -9,8 +9,14 @@ import {
   Text,
   View,
 } from 'react-native';
+import _ from 'lodash'
 export default class Item extends Component {
+  
   shouldComponentUpdate(nextProps, nextState) {
+    if(this.props.viewType === 'ListView') {
+      // listview 更新逻辑
+      return !_.isEqual(this.props.item, nextProps.item)
+    }
     return nextProps.toRenderItem
   }
   

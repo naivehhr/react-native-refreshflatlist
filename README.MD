@@ -183,8 +183,9 @@ export default class FlatListTest extends Component {
 * 更改ScrollView为FlatList实现
 * 更新example
 
-2017/06/29
-* 代码优化
+2017/06/30
+* 代码结构
+* 优化性能
+* ScrollView下刷新 => render整个页面
 
 ## TODO
-解决=> android listview 向下滚动一直会触发render的问题

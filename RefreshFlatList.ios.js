@@ -164,7 +164,8 @@ export default class RefreshFlatList extends Component {
         this.beforeRefreshState = RefreshState.pullToRefresh
         this.updateRefreshViewState(RefreshState.refreshdown)
       } else {
-        this.updateRefreshViewState(RefreshState.pullToRefresh)
+        //?
+        // this.updateRefreshViewState(RefreshState.pullToRefresh)
       }
     }
   }
@@ -227,15 +228,6 @@ export default class RefreshFlatList extends Component {
 
   onMove(e, g) {
     this.mTop = g.dy
-
-    // if(!this.key && this._scrollEndY < -this.headerHeight) {
-    //   this.key = true
-    //   this.updateRefreshViewState(RefreshState.releaseToRefresh)
-    // } else if(this.key && this._scrollEndY > -this.headerHeight) {
-    //   this.key = false
-    //   this.updateRefreshViewState(RefreshState.pullToRefresh)
-    // }
-    
     if(g.dy >= 0){
       let p = parseInt(( g.dy / (2 * this.headerHeight)) * 100)
       p = p > 100? 100: p
@@ -252,6 +244,7 @@ export default class RefreshFlatList extends Component {
     this.isOnMove = false
     if(this._scrollEndY < -this.headerHeight) {
       const { onRefreshFun } = this.props
+      this.setRefreshState(true)
       onRefreshFun?onRefreshFun(): this._onRefreshFun()
     }
   }
@@ -263,18 +256,6 @@ export default class RefreshFlatList extends Component {
    _renderItem = (item) => {
     return <Item {...this.props} item={item} toRenderItem={this.state.toRenderItem}/>
   }
-
-  // _renderItemScrollView = () => {
-  //   const { renderItem } = this.props
-  //   if(renderItem) {
-  //     return renderItem()
-  //   }
-  //   return (
-  //     <View style={{width: width, height: 100}} >
-  //       <Text> {'This is a ScrollView'} </Text>
-  //     </View>
-  //   )
-  // }
 
   customRefreshView = () => {
     const { customRefreshView } = this.props

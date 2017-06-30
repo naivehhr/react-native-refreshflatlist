@@ -30,14 +30,15 @@ class TestListView extends Component {
 
   componentDidMount() {
     setTimeout(()=>{
-        this.setState({
-          _data: [{title: '54555'}]
-        })
-      }, 5000);
+      this.setState({
+        _data: [{title: '54555'}]
+      })
+    }, 3000);
   }
 
   onRefreshFun = () => {
-    this.setState({refreshing: true})
+    // 这里可以放到组件内部实现如果触发就直接设置为true
+    // this.setState({refreshing: true})
     setTimeout(()=>{
       this.setState({
         refreshing: false, 
@@ -101,11 +102,11 @@ class TestScrollView extends Component {
   }
 
   componentDidMount() {
-    setTimeout(()=>{
-        this.setState({
-         msg: 'People do not frivolous waste young 5000'
-        })
-      }, 5000);
+    // setTimeout(()=>{
+    //     this.setState({
+    //      msg: 'People do not frivolous waste young 5000'
+    //     })
+    //   }, 5000);
   }
   
   _renderItem = () => {
