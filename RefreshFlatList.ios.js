@@ -2,7 +2,7 @@
  * @Author: aran.hu
  * @Date: 2017-04-14 14:29:15
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-06-30 10:56:30
+ * @Last Modified time: 2017-06-30 15:10:23
  */
 
 
@@ -59,6 +59,7 @@ export default class RefreshFlatList extends Component {
   static propTypes = {
     customRefreshView: PropTypes.func,
     onRefreshFun: PropTypes.func,
+    onEndReached: PropTypes.func,
     isRefresh: PropTypes.bool,
     viewType: PropTypes.oneOf(['ListView', 'ScrollView'])
   };
@@ -184,7 +185,6 @@ export default class RefreshFlatList extends Component {
       case RefreshState.refreshdown:
         this.setState({refreshState: RefreshState.refreshdown, refreshText: RefreshText.refreshdown, percent: 100, toRenderItem: true}, () => {
           // This delay is shown in order to show the refresh time to complete the refresh
-          this.setState({toRenderItem: false}) 
           this.t = setTimeout(() => {
             this._flatList.scrollToOffset({animated:true, offset: 0})
             this.tt = setTimeout(() => {
@@ -198,6 +198,10 @@ export default class RefreshFlatList extends Component {
   }
 
   _onEndReached = () => {
+    const { onEndReached } = this.props
+    if(onEndReached) {
+      return onEndReached()
+    }
     this.setState({footerMsg: 'loading'})
     this.timer2 = setTimeout(() => {
       this.setState({footerMsg: 'load more'})
@@ -207,6 +211,7 @@ export default class RefreshFlatList extends Component {
   _onScroll = (e) => {
     let { y } = e.nativeEvent.contentOffset
     this._scrollEndY = y
+    if(this._scrollEndY == 0) this.setState({toRenderItem: true})
     if(!this.isOnMove && -y >= 0){
       //刷新状态下，上推列表依percent然显示100%
       let p = parseInt(( -y / (this.headerHeight)) * 100)
@@ -259,17 +264,17 @@ export default class RefreshFlatList extends Component {
     return <Item {...this.props} item={item} toRenderItem={this.state.toRenderItem}/>
   }
 
-  _renderItemScrollView = () => {
-    const { renderItem } = this.props
-    if(renderItem) {
-      return renderItem()
-    }
-    return (
-      <View style={{width: width, height: 100}} >
-        <Text> {'This is a ScrollView'} </Text>
-      </View>
-    )
-  }
+  // _renderItemScrollView = () => {
+  //   const { renderItem } = this.props
+  //   if(renderItem) {
+  //     return renderItem()
+  //   }
+  //   return (
+  //     <View style={{width: width, height: 100}} >
+  //       <Text> {'This is a ScrollView'} </Text>
+  //     </View>
+  //   )
+  // }
 
   customRefreshView = () => {
     const { customRefreshView } = this.props
@@ -382,7 +387,7 @@ export default class RefreshFlatList extends Component {
           {...this.props}
           onScroll={this._onScroll}
           data={['1']}
-          renderItem={this._renderItemScrollView}
+          renderItem={this._renderItem}
           keyExtractor={(v,i)=>i}
           ListHeaderComponent={this.customRefreshView}
           style={[{...this.props.style},{marginTop: -this.headerHeight}]}

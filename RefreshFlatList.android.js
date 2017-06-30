@@ -2,7 +2,7 @@
  * @Author: aran.hu 
  * @Date: 2017-04-14 14:29:04 
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-06-30 10:55:54
+ * @Last Modified time: 2017-06-30 15:18:37
  */
 
 import React, { Component, PropTypes } from 'react';
@@ -44,8 +44,8 @@ export const RefreshText = {
 }
 
 export const FooterText = {
-  pushToRefresh: 'pull to refresh',
-  loading: 'refreshing...'
+  pushToRefresh: 'load more',
+  loading: 'loading...'
 }
 
 export const ViewType = {
@@ -63,6 +63,7 @@ export default class FlatListTest extends Component {
     customRefreshView: PropTypes.func,
     isRefresh: PropTypes.bool,
     onRefreshFun: PropTypes.func,
+    onEndReached: PropTypes.func,
     viewType: PropTypes.oneOf(['ListView', 'ScrollView']) 
   };
   
@@ -93,6 +94,11 @@ export default class FlatListTest extends Component {
     }
     this._marginTop.setValue(-this.headerHeight)
     this._marginTop.addListener((v) => {
+      if(v.value == -this.headerHeight && !this.state.toRenderItem){
+        this.setState({toRenderItem: true}) 
+      } else {
+        this.setState({toRenderItem: false}) 
+      }
       let p = parseInt(( (this.headerHeight + v.value) / (this.headerHeight)) * 100)
       if(this.state.refreshState !== RefreshState.refreshdown)
         this.setState({percent: (p > 100? 100: p) + '%'})
@@ -188,7 +194,7 @@ export default class FlatListTest extends Component {
       case RefreshState.refreshdown:
         this.setState({refreshState: RefreshState.refreshdown, refreshText: RefreshText.refreshdown, toRenderItem: true}, () => {
           // This delay is shown in order to show the refresh time to complete the refresh
-          this.setState({toRenderItem: false}) 
+          // this.setState({toRenderItem: false}) 
           this.t = setTimeout(() => {
             Animated.timing(
               this._marginTop,
@@ -240,6 +246,10 @@ export default class FlatListTest extends Component {
   }
 
   _onEndReached = () => {
+    const { onEndReached } = this.props
+    if(onEndReached) {
+      return onEndReached()
+    }
     this.setState({footerMsg: 'loading'})
     this.timer2 = setTimeout(() => {
       this.setState({footerMsg: 'load more'})
@@ -383,7 +393,7 @@ export default class FlatListTest extends Component {
               ListHeaderComponent={this.customRefreshView}
               ListFooterComponent={this._ListFooterComponent}
               onEndReached={this._onEndReached} 
-              onEndReachedThreshold={0}
+              onEndReachedThreshold={10}
               style={[{...this.props.style},
               {marginTop: this._marginTop.interpolate({
                 inputRange: [-this.headerHeight, 0, 500],
@@ -395,5 +405,4 @@ export default class FlatListTest extends Component {
     );
   }
 }
-
 

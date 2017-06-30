@@ -29,6 +29,11 @@ class TestListView extends Component {
   }
 
   componentDidMount() {
+    // setTimeout(()=>{
+    //     this.setState({
+    //       _data: [{title: '54555'}]
+    //     })
+    //   }, 5000);
   }
 
   onRefreshFun = () => {
@@ -38,6 +43,26 @@ class TestListView extends Component {
         refreshing: false, 
         _data: [{title: 'Everyone is dissatisfied with his own fortune.'}]
       })
+      setTimeout(()=>{
+        this.setState({
+          refreshing: false, 
+          _data: [{title: '1111'}]
+        })
+        setTimeout(()=>{
+          this.setState({
+            refreshing: false, 
+            _data: [{title: '22222'}]
+          })
+        }, 1000);
+      }, 1000);
+    }, 1000);
+  }
+
+  onEndReached = () => {
+    setTimeout(()=>{
+        this.setState({
+          _data: this.state._data.concat(Util.makeData(100))
+        })
     }, 1000);
   }
 
@@ -56,6 +81,7 @@ class TestListView extends Component {
           renderItem={this._renderItem}
           viewType={'ListView'}
           onRefreshFun={this.onRefreshFun}
+          onEndReached={this.onEndReached}
           isRefresh={this.state.refreshing}
           style={{backgroundColor:'yellow'}}
         />
