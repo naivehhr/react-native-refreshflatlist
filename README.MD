@@ -187,3 +187,4 @@ export default class FlatListTest extends Component {
 * 代码优化
 
 ## TODO
+解决=> android listview 向下滚动一直会触发render的问题

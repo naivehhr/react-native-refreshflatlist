@@ -2,7 +2,7 @@
  * @Author: aran.hu 
  * @Date: 2017-04-14 14:29:04 
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-06-30 15:18:37
+ * @Last Modified time: 2017-06-30 15:45:10
  */
 
 import React, { Component, PropTypes } from 'react';
@@ -94,11 +94,12 @@ export default class FlatListTest extends Component {
     }
     this._marginTop.setValue(-this.headerHeight)
     this._marginTop.addListener((v) => {
-      if(v.value == -this.headerHeight && !this.state.toRenderItem){
-        this.setState({toRenderItem: true}) 
-      } else {
-        this.setState({toRenderItem: false}) 
-      }
+      if(v.value == -this.headerHeight) this.setState({toRenderItem: true}) 
+      // if(v.value == -this.headerHeight && !this.state.toRenderItem){
+      //   this.setState({toRenderItem: true}) 
+      // } else {
+      //   this.setState({toRenderItem: false}) 
+      // }
       let p = parseInt(( (this.headerHeight + v.value) / (this.headerHeight)) * 100)
       if(this.state.refreshState !== RefreshState.refreshdown)
         this.setState({percent: (p > 100? 100: p) + '%'})
