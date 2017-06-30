@@ -2,7 +2,7 @@
  * @Author: aran.hu 
  * @Date: 2017-04-14 14:29:04 
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-06-29 14:32:50
+ * @Last Modified time: 2017-06-30 10:55:54
  */
 
 import React, { Component, PropTypes } from 'react';
@@ -55,13 +55,13 @@ export const ViewType = {
 
 export default class FlatListTest extends Component {
   static defaultProps = {
-    refreshing: false,
+    isRefresh: false,
     viewType: 'ScrollView',
   };
 
   static propTypes = {
     customRefreshView: PropTypes.func,
-    refreshing: PropTypes.bool,
+    isRefresh: PropTypes.bool,
     onRefreshFun: PropTypes.func,
     viewType: PropTypes.oneOf(['ListView', 'ScrollView']) 
   };
@@ -75,7 +75,8 @@ export default class FlatListTest extends Component {
       refreshState: RefreshState.pullToRefresh, 
       refreshText: RefreshText.pullToRefresh,
       percent: 0,
-      footerMsg: FooterText.pushToRefresh
+      footerMsg: FooterText.pushToRefresh,
+      toRenderItem: true
     }
     this._marginTop = new Animated.Value()
     this._scrollEndY = 0
@@ -93,7 +94,8 @@ export default class FlatListTest extends Component {
     this._marginTop.setValue(-this.headerHeight)
     this._marginTop.addListener((v) => {
       let p = parseInt(( (this.headerHeight + v.value) / (this.headerHeight)) * 100)
-      this.setState({percent: (p > 100? 100: p) + '%'})
+      if(this.state.refreshState !== RefreshState.refreshdown)
+        this.setState({percent: (p > 100? 100: p) + '%'})
     })
   }
 
@@ -184,8 +186,9 @@ export default class FlatListTest extends Component {
         })
         break;  
       case RefreshState.refreshdown:
-        this.setState({refreshState: RefreshState.refreshdown, refreshText: RefreshText.refreshdown}, () => {
+        this.setState({refreshState: RefreshState.refreshdown, refreshText: RefreshText.refreshdown, toRenderItem: true}, () => {
           // This delay is shown in order to show the refresh time to complete the refresh
+          this.setState({toRenderItem: false}) 
           this.t = setTimeout(() => {
             Animated.timing(
               this._marginTop,
@@ -207,6 +210,7 @@ export default class FlatListTest extends Component {
     /**
      * If you are in the refresh or refresh the completion of the state will not trigger the refresh
      */
+    this.setState({toRenderItem: false})
     if(this.state.refreshState >= RefreshState.refreshing) return
     this._scrollEndY = movement
     this._marginTop.setValue( movement - this.headerHeight )
@@ -243,7 +247,7 @@ export default class FlatListTest extends Component {
   }
 
   _renderItem = (item) => {
-    return <Item {...this.props} item={item} />
+    return <Item {...this.props} item={item} toRenderItem={this.state.toRenderItem} />
   }
 
   customRefreshView = () => {
@@ -363,7 +367,11 @@ export default class FlatListTest extends Component {
               renderItem={this._renderItem}
               keyExtractor={(v,i)=>i}
               ListHeaderComponent={this.customRefreshView}
-              style={[{...this.props.style},{marginTop: this._marginTop}]}
+              style={[{...this.props.style},
+              {marginTop: this._marginTop.interpolate({
+                inputRange: [-this.headerHeight, 0, 500],
+                outputRange: [-this.headerHeight,0, 150]
+              })}]}
             />
           :
             <AnimatedFlatList
@@ -376,11 +384,16 @@ export default class FlatListTest extends Component {
               ListFooterComponent={this._ListFooterComponent}
               onEndReached={this._onEndReached} 
               onEndReachedThreshold={0}
-              style={[{...this.props.style},{marginTop: this._marginTop}]}
+              style={[{...this.props.style},
+              {marginTop: this._marginTop.interpolate({
+                inputRange: [-this.headerHeight, 0, 500],
+                outputRange: [-this.headerHeight,0, 150]
+              })}]}
             />
         }
       </AndroidSwipeRefreshLayout>
     );
   }
 }
+
 

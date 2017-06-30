@@ -144,7 +144,7 @@ export default class FlatListTest extends Component {
       <View style={styles.container}>
         <RefreshFlatList
           data={this.state._data}
-          refreshing={this.state.refreshing}
+          isRefresh={this.state.refreshing}
           onRefreshFun={this._onRefreshFun}
           onEndReached={this._onEndReached}
           customRefreshView={this._customerHeader}
@@ -166,7 +166,7 @@ export default class FlatListTest extends Component {
 | ...ListView.propTypes	| | | | | [doc](http://facebook.github.io/react-native/docs/flatlist.html)
 | customRefreshView		| func	| Yes | DefaultView | 自定义头部组件
 | onRefreshFun		    | func	| Yes | DefaultTestFun | 触发刷新调用的方法
-| isRefreshing         	| boolean | | false | 
+| isRefresh         	| boolean | | false | 
 | viewType        		| object | Yes | ScrollView | ScrollView, ListView|
 
 
@@ -182,6 +182,6 @@ export default class FlatListTest extends Component {
 * 更改ScrollView为FlatList实现
 * 更新example
 
-2017/06/29
+2017/06/30
 * 优化android平台性能
 

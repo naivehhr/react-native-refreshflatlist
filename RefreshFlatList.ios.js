@@ -2,7 +2,7 @@
  * @Author: aran.hu
  * @Date: 2017-04-14 14:29:15
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-06-29 14:42:12
+ * @Last Modified time: 2017-06-30 10:56:30
  */
 
 
@@ -52,13 +52,14 @@ export const ViewType = {
 export default class RefreshFlatList extends Component {
 
   static defaultProps = {
-    refreshing: false,
+    isRefresh: false,
     viewType: 'ScrollView',
   };
 
   static propTypes = {
     customRefreshView: PropTypes.func,
-    refreshing: PropTypes.bool,
+    onRefreshFun: PropTypes.func,
+    isRefresh: PropTypes.bool,
     viewType: PropTypes.oneOf(['ListView', 'ScrollView'])
   };
 
@@ -72,6 +73,7 @@ export default class RefreshFlatList extends Component {
       refreshText: RefreshText.pullToRefresh,
       percent: 0,
       footerMsg: 'load more',
+      toRenderItem: true
     }
     this._scrollEndY = 0
     this.headerHeight = 60
@@ -180,8 +182,9 @@ export default class RefreshFlatList extends Component {
         })
         break;
       case RefreshState.refreshdown:
-        this.setState({refreshState: RefreshState.refreshdown, refreshText: RefreshText.refreshdown, percent: 100}, () => {
+        this.setState({refreshState: RefreshState.refreshdown, refreshText: RefreshText.refreshdown, percent: 100, toRenderItem: true}, () => {
           // This delay is shown in order to show the refresh time to complete the refresh
+          this.setState({toRenderItem: false}) 
           this.t = setTimeout(() => {
             this._flatList.scrollToOffset({animated:true, offset: 0})
             this.tt = setTimeout(() => {
@@ -207,12 +210,14 @@ export default class RefreshFlatList extends Component {
     if(!this.isOnMove && -y >= 0){
       //刷新状态下，上推列表依percent然显示100%
       let p = parseInt(( -y / (this.headerHeight)) * 100)
-      this.setState({percent: (p > 100? 100: p)})
+      if(this.state.refreshState !== RefreshState.refreshdown)
+        this.setState({percent: (p > 100? 100: p)})
     }
   }
 
   onStart(e, g) {
     this.isOnMove = true
+    this.setState({toRenderItem: false}) 
   }
 
   onMove(e, g) {
@@ -251,7 +256,7 @@ export default class RefreshFlatList extends Component {
   }
 
    _renderItem = (item) => {
-    return <Item {...this.props} item={item} />
+    return <Item {...this.props} item={item} toRenderItem={this.state.toRenderItem}/>
   }
 
   _renderItemScrollView = () => {

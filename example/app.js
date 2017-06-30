@@ -23,15 +23,21 @@ class TestListView extends Component {
     this.state = {
       headerHeight: 100,
       refreshing: false,
-      _data: [],
+      _data: Util.makeData(),
       footerMsg: 'loading more'
     }
   }
 
   componentDidMount() {
-    this.setState({_data: Util.makeData()})
+  }
+
+  onRefreshFun = () => {
+    this.setState({refreshing: true})
     setTimeout(()=>{
-      this.setState({_data: [{title: 'Everyone is dissatisfied with his own fortune.'}]})
+      this.setState({
+        refreshing: false, 
+        _data: [{title: 'Everyone is dissatisfied with his own fortune.'}]
+      })
     }, 1000);
   }
 
@@ -49,6 +55,8 @@ class TestListView extends Component {
           data={this.state._data}
           renderItem={this._renderItem}
           viewType={'ListView'}
+          onRefreshFun={this.onRefreshFun}
+          isRefresh={this.state.refreshing}
           style={{backgroundColor:'yellow'}}
         />
       </View>
@@ -61,15 +69,15 @@ class TestScrollView extends Component {
   constructor() {
     super()
     this.state = {
+      refreshing: false,
       msg: 'I just want to say'
     }
   }
 
   componentDidMount() {
-    setTimeout(()=>{
-      this.setState({msg: 'People do not frivolous waste young'})
-    }, 2000);
+
   }
+  
   _renderItem = () => {
     return (
       <View style={{
@@ -82,12 +90,21 @@ class TestScrollView extends Component {
     )
   }
 
+  onRefreshFun = () => {
+    this.setState({refreshing: true})
+    setTimeout(()=>{
+      this.setState({refreshing: false, msg: 'People do not frivolous waste young'})
+    }, 1000);
+  }
+  
   render() {
     return(
       <View style={styles.container}>
         <RefreshFlatList
           renderItem={this._renderItem}
           viewType={'ScrollView'}
+          onRefreshFun={this.onRefreshFun}
+          isRefresh={this.state.refreshing}
           style={{backgroundColor:'red'}}
         />
       </View>
