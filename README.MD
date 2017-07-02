@@ -1,10 +1,10 @@
-## RefreshFlatList & RefreshVirtualizedList
+## RefreshFlatList
 
 [![npm](https://img.shields.io/npm/v/react-native-refreshflatlist.svg)](https://www.npmjs.com/package/react-native-refreshflatlist)
 [![npm](https://img.shields.io/npm/dm/react-native-refreshflatlist.svg)](https://www.npmjs.com/package/react-native-refreshflatlist)
 [![npm](https://img.shields.io/npm/dt/react-native-refreshflatlist.svg)](https://www.npmjs.com/package/react-native-refreshflatlist)
 
-> A simple support ios and android platform custom header refresh components; currently only supports FlatList (RN >= 0.43)
+> A simple support ios and android platform custom header refresh components(RN >= 0.43)
 
 
 
