@@ -4,7 +4,9 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions
+  Dimensions,
+  Button,
+  Alert
 } from 'react-native';
 import Util from './util'
 import RefreshFlatList, { RefreshState, ViewType } from 'react-native-refreshflatlist'
@@ -24,16 +26,16 @@ class TestListView extends Component {
       headerHeight: 100,
       refreshing: false,
       _data: Util.makeData(),
-      footerMsg: 'loading more'
+      footerMsg: 'load more'
     }
   }
 
   componentDidMount() {
-    setTimeout(()=>{
-      this.setState({
-        _data: [{title: '54555'}]
-      })
-    }, 3000);
+    // setTimeout(()=>{
+    //   this.setState({
+    //     _data: [{title: '54555'}]
+    //   })
+    // }, 3000);
   }
 
   onRefreshFun = () => {
@@ -60,17 +62,31 @@ class TestListView extends Component {
   }
 
   onEndReached = () => {
+    this.setState({footerMsg: 'loading'})
     setTimeout(()=>{
         this.setState({
-          _data: this.state._data.concat(Util.makeData(100))
+          _data: this.state._data.concat(Util.makeData(100)),
+          footerMsg: 'load more'
         })
     }, 1000);
+  }
+
+  onPress = () => {
+    Alert.alert('onPress')
   }
 
   _renderItem = ({item}) => {
     return (
       <View style={{width: width, height: 100}} >
         <Text>{'The Customer ListView' + item.title} </Text>
+        <Button onPress={this.onPress} title={'btn'}/>
+      </View>
+    )
+  }
+  _listFooterComponent = () => {
+    return (
+      <View style={{ flex:1, justifyContent: 'center', alignItems: 'center',width: width, height: 30, backgroundColor: 'pink'}} > 
+         <Text style={{textAlign: 'center',}}> { this.state.footerMsg } </Text>
       </View>
     )
   }
@@ -80,6 +96,7 @@ class TestListView extends Component {
         <RefreshFlatList
           data={this.state._data}
           renderItem={this._renderItem}
+          listFooterComponent={this._listFooterComponent}
           viewType={'ListView'}
           onRefreshFun={this.onRefreshFun}
           onEndReached={this.onEndReached}
@@ -117,6 +134,7 @@ class TestScrollView extends Component {
         justifyContent: 'center',
         alignItems: 'center'}} >
         <Text>{'The Customer ScrollView' + this.state.msg} </Text>
+        <Button onPress={this.onPress} title={'btn'}/>
       </View>
     )
   }
@@ -126,6 +144,9 @@ class TestScrollView extends Component {
     setTimeout(()=>{
       this.setState({refreshing: false, msg: 'People do not frivolous waste young'})
     }, 1000);
+  }
+    onPress = () => {
+    Alert.alert('onPress')
   }
   
   render() {

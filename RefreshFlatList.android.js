@@ -367,7 +367,7 @@ export default class FlatListTest extends Component {
     }
   }
 
-  _ListFooterComponent = () => {
+  listFooterComponent = () => {
     const { footerMsg } = this.state
     const { listFooterComponent } = this.props
     if(listFooterComponent) return listFooterComponent()
@@ -412,7 +412,7 @@ export default class FlatListTest extends Component {
               keyExtractor={(v,i)=>i}
               renderItem={this._renderItem}
               ListHeaderComponent={this.customRefreshView}
-              ListFooterComponent={this._ListFooterComponent}
+              ListFooterComponent={this.listFooterComponent}
               onEndReached={this._onEndReached} 
               onEndReachedThreshold={10}
               onTouchStart={this._onTouchStart}
