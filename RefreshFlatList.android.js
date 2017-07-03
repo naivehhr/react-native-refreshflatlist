@@ -2,7 +2,7 @@
  * @Author: aran.hu 
  * @Date: 2017-04-14 14:29:04 
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-06-30 17:58:24
+ * @Last Modified time: 2017-07-03 10:54:57
  */
 
 import React, { Component, PropTypes } from 'react';
@@ -266,15 +266,30 @@ export default class FlatListTest extends Component {
     }, 1000)
   }
 
-  _onTouchStart = () => {
-    this.setState({toRenderItem: false})
+  // _onTouchStart = () => {
+  //   if(this.state.toRenderItem)
+  //     this.setState({toRenderItem: false})
+  // } 
+  
+  _onTouchEnd = () => {
+    if(!this.state.toRenderItem)
+      this.setState({toRenderItem: true})
   } 
   _onMomentumScrollEnd = () => {
-    this.setState({toRenderItem: true})
+    if(!this.state.toRenderItem)
+      this.setState({toRenderItem: true})
   }
+  
+  _onScrollBeginDrag = () => {
+    if(this.state.toRenderItem)
+      this.setState({toRenderItem: false})
+  }
+
   _onScrollEndDrag = () => {
-    this.setState({toRenderItem: true})
+    if(!this.state.toRenderItem)
+      this.setState({toRenderItem: true})
   }
+  
   _renderItem = (item) => {
     return <Item {...this.props} item={item} toRenderItem={this.state.toRenderItem} />
   }
@@ -367,7 +382,7 @@ export default class FlatListTest extends Component {
     }
   }
 
-  listFooterComponent = () => {
+  _ListFooterComponent = () => {
     const { footerMsg } = this.state
     const { listFooterComponent } = this.props
     if(listFooterComponent) return listFooterComponent()
@@ -396,7 +411,9 @@ export default class FlatListTest extends Component {
               renderItem={this._renderItem}
               keyExtractor={(v,i)=>i}
               ListHeaderComponent={this.customRefreshView}
-              onTouchStart={this._onTouchStart}
+              onTouchEnd={this._onTouchEnd}
+              onScrollBeginDrag={this._onScrollBeginDrag}
+              onScrollEndDrag={this._onScrollEndDrag}
               onMomentumScrollEnd={this._onMomentumScrollEnd}
               style={[{...this.props.style},
               {marginTop: this._marginTop.interpolate({
@@ -412,10 +429,11 @@ export default class FlatListTest extends Component {
               keyExtractor={(v,i)=>i}
               renderItem={this._renderItem}
               ListHeaderComponent={this.customRefreshView}
-              ListFooterComponent={this.listFooterComponent}
+              ListFooterComponent={this._ListFooterComponent}
               onEndReached={this._onEndReached} 
               onEndReachedThreshold={10}
-              onTouchStart={this._onTouchStart}
+              onTouchEnd={this._onTouchEnd}
+              onScrollBeginDrag={this._onScrollBeginDrag}
               onScrollEndDrag={this._onScrollEndDrag}
               onMomentumScrollEnd={this._onMomentumScrollEnd}
               style={[{...this.props.style},
