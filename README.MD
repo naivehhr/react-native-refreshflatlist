@@ -188,4 +188,9 @@ export default class FlatListTest extends Component {
 * 优化性能
 * ScrollView下刷新 => render整个页面
 
-## TODO
+2017/07/3
+* 更改android手势触发逻辑
+
+
+## 问题
+* 切换页面时同样会触发使用本组件的页面render（实测过大影响）
