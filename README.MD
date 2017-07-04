@@ -193,4 +193,4 @@ export default class FlatListTest extends Component {
 
 
 ## 问题
-* 切换页面时同样会触发使用本组件的页面render（实测过大影响）
+* 切换页面时同样会触发使用本组件的页面render
