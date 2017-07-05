@@ -148,7 +148,7 @@ export default class FlatListTest extends Component {
           onRefreshFun={this._onRefreshFun}
           onEndReached={this._onEndReached}
           customRefreshView={this._customerHeader}
-          ListFooterComponent={this._listFooterComponent}
+          listFooterComponent={this._listFooterComponent}
           renderItem={this._renderItem}
           viewType={ViewType.ListView}
         />
