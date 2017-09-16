@@ -226,7 +226,7 @@ export default class FlatListTest extends Component {
     // this.setState({toRenderItem: false})
     if(this.state.refreshState >= RefreshState.refreshing) return
     this._scrollEndY = movement
-    this._marginTop.setValue( movement - this.headerHeight )
+    if(movement >= 0) this._marginTop.setValue( movement - this.headerHeight )
     if(movement >= this.headerHeight) {
       this.updateRefreshViewState(RefreshState.releaseToRefresh)
     } else if(movement < this.headerHeight) {
