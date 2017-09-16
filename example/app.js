@@ -46,29 +46,29 @@ class TestListView extends Component {
         refreshing: false, 
         _data: [{title: 'Everyone is dissatisfied with his own fortune.'}]
       })
-      setTimeout(()=>{
-        this.setState({
-          refreshing: false, 
-          _data: [{title: '1111'}]
-        })
-        setTimeout(()=>{
-          this.setState({
-            refreshing: false, 
-            _data: [{title: '22222'}]
-          })
-        }, 1000);
-      }, 1000);
+      // setTimeout(()=>{
+      //   this.setState({
+      //     refreshing: false, 
+      //     _data: [{title: '1111'}]
+      //   })
+      //   setTimeout(()=>{
+      //     this.setState({
+      //       refreshing: false, 
+      //       _data: [{title: '22222'}]
+      //     })
+      //   }, 1000);
+      // }, 1000);
     }, 1000);
   }
 
   onEndReached = () => {
-    this.setState({footerMsg: 'loading'})
-    setTimeout(()=>{
-        this.setState({
-          _data: this.state._data.concat(Util.makeData(100)),
-          footerMsg: 'load more'
-        })
-    }, 1000);
+    // this.setState({footerMsg: 'loading'})
+    // setTimeout(()=>{
+    //     this.setState({
+    //       _data: this.state._data.concat(Util.makeData(100)),
+    //       footerMsg: 'load more'
+    //     })
+    // }, 1000);
   }
 
   onPress = () => {
