@@ -72,16 +72,16 @@ class TestListView extends Component {
   }
 
   onPress(isTriggerPressFn) {
-    // 仅Android上有效
+    // 仅需在Android设置
     if (isTriggerPressFn()) {
       Alert.alert('onPress')
     }
   }
 
-  _renderItem = (isTriggerPressFn, { item }) => {
+  _renderItem = (isTriggerPressFn, data) => {
     return (
       <View style={{ width: width, height: 100 }} >
-        <Text>{'The Customer ListView' + item.title} </Text>
+        <Text>{'The Customer ListView'} </Text>
         <Button onPress={this.onPress.bind(this, isTriggerPressFn)} title={'btn'} />
       </View>
     )
@@ -150,8 +150,9 @@ class TestScrollView extends Component {
       this.setState({ refreshing: false, msg: 'People do not frivolous waste young' })
     }, 1000);
   }
-  onPress(isTop){
-    if(isTop()){
+
+  onPress(isTriggerPressFn){
+    if(isTriggerPressFn()){
       Alert.alert('onPress')
     }
   }

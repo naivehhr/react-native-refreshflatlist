@@ -161,14 +161,15 @@ export default class FlatListTest extends Component {
 ### Props
 * * * 
 
-| Prop              	| Type    |  Optional  | Default | Description |
-| --------          	| -----   | ----       | -----   | ----        |
-| ...ListView.propTypes	| | | | | [doc](http://facebook.github.io/react-native/docs/flatlist.html)
-| customRefreshView		| func	| Yes | DefaultView | 自定义头部组件
-| onRefreshFun		    | func	| Yes | DefaultTestFun | 触发刷新调用的方法
-| onEndReached		    | func	| Yes | DefaultTestFun | 触发加载调用的方法
-| isRefreshing         	| boolean | | false | 
-| viewType        		| object | Yes | ScrollView | ScrollView, ListView|
+| Prop              	| Type    |  Optional  | Default | Description | Platform |
+| --------          	| -----   | ----       | -----   | ----        | ----     |
+| ...ListView.propTypes	| | | | [doc](http://facebook.github.io/react-native/docs/flatlist.html) | |
+| customRefreshView		| func	| Yes | DefaultView | 自定义头部组件 | all |
+| onRefreshFun		   	| func	| Yes | DefaultTestFun | 触发刷新调用的方法 | all |
+| onEndReached		   	| func	| Yes | DefaultTestFun | 触发加载调用的方法 | all |
+| isTriggerPressFn     	| func | Yes | return true | 列表滑动中，判断是否应响应触摸点的点击事件(button的onPress事件)；只有回到原点才会触发 | android |
+| isRefreshing         	| boolean | | false |  | all |
+| viewType        		| object | Yes | ScrollView | ScrollView, ListView| all |
 
 
 
@@ -178,19 +179,26 @@ export default class FlatListTest extends Component {
 ## 更新日志
 
 2017/06/23
+
 * 升级RN至0.45.1
 * 集成React Navigation
 * 更改ScrollView为FlatList实现
 * 更新example
 
 2017/06/30
+
 * 代码结构
 * 优化性能
 * ScrollView下刷新 => render整个页面
 
 2017/07/3
+
 * 更改android手势触发逻辑
+
+2017/12/27
+
+* 修复一些情况下Android平台滑动列表时触发子元素点击事件的问题
 
 
 ## 问题
-* 切换页面时同样会触发使用本组件的页面render
+

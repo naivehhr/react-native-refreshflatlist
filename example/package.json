@@ -11,8 +11,8 @@
     "lodash": "^4.17.4",
     "react": "16.0.0-alpha.6",
     "react-native": "0.43.4",
-    "react-native-refreshflatlist": "^1.1.1",
-    "react-native-swiper": "^1.5.10",
+    "react-native-refreshflatlist": "^1.1.3",
+    "react-native-swiper": "^1.5.13",
     "react-navigation": "^1.0.0-beta.11"
   },
   "devDependencies": {
