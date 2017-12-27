@@ -27,7 +27,7 @@ react-native link react-native-refreshflatlist
 
 ```
 // ScrollView
-_renderItem = () => {
+_renderItem = (isTriggerPressFn) => {
 	return (
 	  <View style={{width: width, height: 100}} >
 	    <Text>{'Customer ScrollView'} </Text>
@@ -36,7 +36,7 @@ _renderItem = () => {
 }
 
 // ListView
-_renderItem = ({item}) => {
+_renderItem = (isTriggerPressFn, data) => {
     return (
       <View style={{width: width, height: 100}} >
         <Text>{'Customer ListVeiw' + item.title} </Text>
@@ -78,11 +78,18 @@ export default class FlatListTest extends Component {
     },2000)
   }
 
-  _renderItem = ({item}) => {
-    // ListView Item
+  onPress(isTriggerPressFn) {
+    // 仅需在Android设置
+    if (isTriggerPressFn()) {
+      Alert.alert('onPress')
+    }
+  }
+
+  _renderItem = (isTriggerPressFn, data) => {
     return (
-      <View style={{width: width, height: 100}} >
-        <Text>{'list item' + item.title} </Text>
+      <View style={{ width: width, height: 100 }} >
+        <Text>{'The Customer ListView'} </Text>
+        <Button onPress={this.onPress.bind(this, isTriggerPressFn)} title={'btn'} />
       </View>
     )
   }
@@ -201,4 +208,4 @@ export default class FlatListTest extends Component {
 
 
 ## 问题
-
+* 切换页面时同样会触发使用本组件的页面render
