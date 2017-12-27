@@ -2,7 +2,7 @@
  * @Author: aran.hu 
  * @Date: 2017-06-29 14:23:37 
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-06-30 10:55:36
+ * @Last Modified time: 2017-12-27 14:24:42
  */
 import React, { Component, PropTypes } from 'react';
 import {
@@ -15,13 +15,13 @@ export default class Item extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if(this.props.viewType === 'ListView') {
       // listview 更新逻辑
-      return !_.isEqual(this.props.item, nextProps.item)
+      return !_.isEqual(this.props.data, nextProps.data)
     }
     return nextProps.toRenderItem
   }
   
   render() {
-    const { renderItem, item, bingo} = this.props
-    return item?renderItem(item): renderItem()
+    const { renderItem, data, isTriggerPressFn=()=>true} = this.props
+    return renderItem(isTriggerPressFn, data)
   }
 }

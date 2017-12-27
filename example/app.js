@@ -10,14 +10,14 @@ import {
 } from 'react-native';
 import Util from './util'
 import RefreshFlatList, { RefreshState, ViewType } from 'react-native-refreshflatlist'
-const {height, width} = Dimensions.get('window');
-import { 
-	StackNavigator, 
-	TabNavigator, 
-	DrawerNavigator,
-	DrawerItems,
+const { height, width } = Dimensions.get('window');
+import {
+  StackNavigator,
+  TabNavigator,
+  DrawerNavigator,
+  DrawerItems,
   NavigationActions
- } from 'react-navigation'
+} from 'react-navigation'
 class TestListView extends Component {
 
   constructor() {
@@ -41,10 +41,10 @@ class TestListView extends Component {
   onRefreshFun = () => {
     // 这里可以放到组件内部实现如果触发就直接设置为true
     // this.setState({refreshing: true})
-    setTimeout(()=>{
+    setTimeout(() => {
       this.setState({
-        refreshing: false, 
-        _data: [{title: 'Everyone is dissatisfied with his own fortune.'}]
+        refreshing: false,
+        _data: [{ title: 'Everyone is dissatisfied with his own fortune.' }]
       })
       // setTimeout(()=>{
       //   this.setState({
@@ -71,22 +71,26 @@ class TestListView extends Component {
     // }, 1000);
   }
 
-  onPress = () => {
-    Alert.alert('onPress')
+  onPress(isTriggerPressFn) {
+    // 仅Android上有效
+    if (isTriggerPressFn()) {
+      Alert.alert('onPress')
+    }
   }
 
-  _renderItem = ({item}) => {
+  _renderItem = (isTriggerPressFn, { item }) => {
     return (
-      <View style={{width: width, height: 100}} >
+      <View style={{ width: width, height: 100 }} >
         <Text>{'The Customer ListView' + item.title} </Text>
-        <Button onPress={this.onPress} title={'btn'}/>
+        <Button onPress={this.onPress.bind(this, isTriggerPressFn)} title={'btn'} />
       </View>
     )
   }
+
   _listFooterComponent = () => {
     return (
-      <View style={{ flex:1, justifyContent: 'center', alignItems: 'center',width: width, height: 30, backgroundColor: 'pink'}} > 
-         <Text style={{textAlign: 'center',}}> { this.state.footerMsg } </Text>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: width, height: 30, backgroundColor: 'pink' }} >
+        <Text style={{ textAlign: 'center', }}> {this.state.footerMsg} </Text>
       </View>
     )
   }
@@ -101,7 +105,7 @@ class TestListView extends Component {
           onRefreshFun={this.onRefreshFun}
           onEndReached={this.onEndReached}
           isRefresh={this.state.refreshing}
-          style={{backgroundColor:'yellow'}}
+          style={{ backgroundColor: 'yellow' }}
         />
       </View>
     );
@@ -125,39 +129,42 @@ class TestScrollView extends Component {
     //     })
     //   }, 5000);
   }
-  
-  _renderItem = () => {
+
+  _renderItem = (isTriggerPressFn) => {
     return (
       <View style={{
-        width: width, 
-        height: height, 
+        width: width,
+        height: height,
         justifyContent: 'center',
-        alignItems: 'center'}} >
+        alignItems: 'center'
+      }} >
         <Text>{'The Customer ScrollView' + this.state.msg} </Text>
-        <Button onPress={this.onPress} title={'btn'}/>
+        <Button onPress={this.onPress.bind(this, isTriggerPressFn)} title={'btn'} />
       </View>
     )
   }
 
   onRefreshFun = () => {
-    this.setState({refreshing: true})
-    setTimeout(()=>{
-      this.setState({refreshing: false, msg: 'People do not frivolous waste young'})
+    this.setState({ refreshing: true })
+    setTimeout(() => {
+      this.setState({ refreshing: false, msg: 'People do not frivolous waste young' })
     }, 1000);
   }
-    onPress = () => {
-    Alert.alert('onPress')
+  onPress(isTop){
+    if(isTop()){
+      Alert.alert('onPress')
+    }
   }
-  
+
   render() {
-    return(
+    return (
       <View style={styles.container}>
         <RefreshFlatList
           renderItem={this._renderItem}
           viewType={'ScrollView'}
           onRefreshFun={this.onRefreshFun}
           isRefresh={this.state.refreshing}
-          style={{backgroundColor:'red'}}
+          style={{ backgroundColor: 'red' }}
         />
       </View>
     )
@@ -171,8 +178,8 @@ const TabStack = TabNavigator({
     screen: TestScrollView,
   },
 }, {
-  initialRouteName: 'Test_ListView',
-});
+    initialRouteName: 'Test_ListView',
+  });
 export default TabStack
 const styles = StyleSheet.create({
   container: {

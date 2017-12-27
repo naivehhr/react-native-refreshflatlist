@@ -2,7 +2,7 @@
  * @Author: aran.hu
  * @Date: 2017-04-14 14:29:15
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-06-30 15:10:23
+ * @Last Modified time: 2017-12-27 14:02:47
  */
 
 
@@ -164,7 +164,6 @@ export default class RefreshFlatList extends Component {
         this.beforeRefreshState = RefreshState.pullToRefresh
         this.updateRefreshViewState(RefreshState.refreshdown)
       } else {
-        //?
         // this.updateRefreshViewState(RefreshState.pullToRefresh)
       }
     }
