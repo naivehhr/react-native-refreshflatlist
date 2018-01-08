@@ -206,6 +206,9 @@ export default class FlatListTest extends Component {
 
 * 修复一些情况下Android平台滑动列表时触发子元素点击事件的问题
 
+2017/12/27
+
+* 升级至RN0.51
 
 ## 问题
-* 切换页面时同样会触发使用本组件的页面render
+
