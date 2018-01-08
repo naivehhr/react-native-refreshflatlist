@@ -5,7 +5,8 @@
  * @Last Modified time: 2017-12-27 14:07:14
  */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   AppRegistry,
   StyleSheet,
