@@ -206,7 +206,7 @@ export default class FlatListTest extends Component {
 
 * 修复一些情况下Android平台滑动列表时触发子元素点击事件的问题
 
-2017/12/27
+2017/1/09
 
 * 升级至RN0.51
 
