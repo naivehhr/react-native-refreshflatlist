@@ -79,7 +79,7 @@ export default class FlatListTest extends Component {
   }
 
   onPress(isTriggerPressFn) {
-    // 仅需在Android设置
+    //isTriggerPressFn Only in Android Settings.
     if (isTriggerPressFn()) {
       Alert.alert('onPress')
     }
@@ -109,7 +109,7 @@ export default class FlatListTest extends Component {
           </Animated.View>
         )
       case RefreshState.releaseToRefresh:
-        return (talk
+        return (
           <Animated.View style={{justifyContent: 'center', alignItems: 'center', width: width, height: headerHeight, backgroundColor: 'red'}} >
             <Text>{ 'release to refresh' + percent }</Text>
           </Animated.View>
