@@ -10,5 +10,6 @@ import {
 } from 'react-native';
 import APP from './app'
 import Test from './Test'
+import scroll from './scroll-absolute'
 
-AppRegistry.registerComponent('example', () => APP);
+AppRegistry.registerComponent('example', () => scroll);
