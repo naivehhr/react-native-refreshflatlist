@@ -10,5 +10,5 @@ import {
 } from 'react-native';
 import APP from './app'
 import Test from './Test'
-
-AppRegistry.registerComponent('example', () => APP);
+import Ball from './animated/Ball'
+AppRegistry.registerComponent('example', () => Ball);
