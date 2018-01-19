@@ -18,7 +18,7 @@ export default class extends Component {
     animated2: new Animated.Value(0),
     opacityA2: new Animated.Value(1),
   }
-
+  
   componentDidMount() {
     const { animated, opacityA, animated2, opacityA2 } = this.state
 
