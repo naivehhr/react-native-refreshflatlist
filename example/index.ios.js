@@ -2,7 +2,7 @@
  * @Author: aran.hu 
  * @Date: 2017-04-17 13:04:08 
  * @Last Modified by: aran.hu
- * @Last Modified time: 2018-01-22 17:34:16
+ * @Last Modified time: 2018-01-23 15:42:28
  */
 
 import {
@@ -14,6 +14,7 @@ import {
   Ball,
   HomeOverView,
   Nofification,
-  ToggleButton
+  ToggleButton,
+  List
 } from './animated'
-AppRegistry.registerComponent('example', () => ToggleButton);
+AppRegistry.registerComponent('example', () => List);
