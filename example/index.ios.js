@@ -15,4 +15,5 @@ import {
   HomeOverView,
   Nofification
 } from './animated'
-AppRegistry.registerComponent('example', () => Nofification);
+import DoNav from './DoNav';
+AppRegistry.registerComponent('example', () => DoNav);

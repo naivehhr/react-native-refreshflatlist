@@ -13,7 +13,7 @@
     "react-native": "0.51.0",
     "react-native-refreshflatlist": "^1.2.1",
     "react-native-swiper": "^1.5.13",
-    "react-navigation": "^1.0.0-beta.11"
+    "react-navigation": "react-community/react-navigation#master"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",
