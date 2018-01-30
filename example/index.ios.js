@@ -2,7 +2,7 @@
  * @Author: aran.hu 
  * @Date: 2017-04-17 13:04:08 
  * @Last Modified by: aran.hu
- * @Last Modified time: 2018-01-19 16:41:11
+ * @Last Modified time: 2018-01-23 15:42:28
  */
 
 import {
@@ -13,7 +13,8 @@ import Test from './Test'
 import {
   Ball,
   HomeOverView,
-  Nofification
+  Nofification,
+  ToggleButton,
+  List
 } from './animated'
-import DoNav from './DoNav';
-AppRegistry.registerComponent('example', () => DoNav);
+AppRegistry.registerComponent('example', () => List);

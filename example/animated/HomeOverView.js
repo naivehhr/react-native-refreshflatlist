@@ -12,6 +12,7 @@ import {
 
 const { width, height } = Dimensions.get('window')
 const headerHeight = 60
+const bgHeight = 300
 export default class HomeOverView extends Component {
 	state = {
 		scrollY: new Animated.Value(0),
@@ -39,7 +40,7 @@ export default class HomeOverView extends Component {
 			}
 		}])
 
-		const threshold = 300 - headerHeight
+		const threshold = bgHeight - headerHeight
 		const backgroundColor = scrollY.interpolate({
 			inputRange: [0, threshold],
 			outputRange: ["transparent", "white"]
@@ -56,7 +57,7 @@ export default class HomeOverView extends Component {
 				>
 					<Animated.View>
 						<Animated.Image
-							style={{ width: width, height: 300 }}
+							style={{ width: width, height: bgHeight }}
 							resizeMode={'cover'}
 							source={require('./2.jpg')}
 						/>
