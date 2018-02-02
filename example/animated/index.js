@@ -1,5 +1,6 @@
 import Ball from './Ball'
 import HomeOverView from './HomeOverView'
+import HomeOverView1 from './HomeOverView1'
 import Nofification from './Nofification'
 import ToggleButton from './ToggleButton'
 import List from './List'
@@ -10,5 +11,6 @@ export {
 	HomeOverView,
 	Nofification,
 	ToggleButton,
-	List
+	List,
+	HomeOverView1
 }

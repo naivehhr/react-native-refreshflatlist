@@ -2,7 +2,7 @@
  * @Author: aran.hu 
  * @Date: 2017-04-17 13:04:12 
  * @Last Modified by: aran.hu
- * @Last Modified time: 2017-06-13 10:46:41
+ * @Last Modified time: 2018-02-02 15:21:17
  */
 
 import {
@@ -24,7 +24,7 @@ import RefreshFlatList, { RefreshState, ViewType } from 'react-native-refreshfla
 const { UIManager } = NativeModules;
 UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 
-class AView extends Component {
+export class AView extends Component {
 
   constructor(props) {
     super()
